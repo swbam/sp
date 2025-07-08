@@ -65,11 +65,7 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
   }, [searchQuery, artistName]);
 
   const handleVote = async (songId: string, voteType: 'up' | 'down') => {
-    if (!user) {
-      toast.error('Please sign in to vote');
-      return;
-    }
-
+    // Allow anonymous voting as per PRD requirements
     try {
       const response = await fetch('/api/votes', {
         method: 'POST',
@@ -78,7 +74,7 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
         },
         body: JSON.stringify({
           setlist_song_id: songId,
-          vote_type: voteType,
+          vote_type: voteType === 'up' ? 'upvote' : 'downvote',
         }),
       });
 
@@ -117,11 +113,7 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
   };
 
   const handleAddSong = async (song: Song) => {
-    if (!user) {
-      toast.error('Please sign in to add songs');
-      return;
-    }
-
+    // Allow anonymous song addition as per PRD requirements
     setIsAddingSong(true);
     try {
       const response = await fetch(`/api/setlists/${showId}/songs`, {
@@ -176,8 +168,8 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
         </p>
       </div>
 
-      {/* Add Song Section */}
-      {user && !isLocked && (
+      {/* Add Song Section - Anonymous users can add songs */}
+      {!isLocked && (
         <div className="mb-6">
           {!isAddingMode ? (
             <Button
@@ -274,7 +266,7 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
                 upvotes={item.upvotes}
                 downvotes={item.downvotes}
                 onVote={(type) => handleVote(item.id, type)}
-                disabled={isLocked || !user}
+                disabled={isLocked}
               />
             </div>
           ))}

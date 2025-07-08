@@ -76,6 +76,9 @@ export interface SetlistSong {
   position: number;
   upvotes: number;
   downvotes: number;
+  notes?: string; // For actual setlists: "acoustic", "cover", "new song"
+  is_played?: boolean; // For actual setlists
+  play_time?: string; // For actual setlists
   created_at: string;
   // Relations
   song?: Song;

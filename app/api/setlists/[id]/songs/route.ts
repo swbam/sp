@@ -10,11 +10,10 @@ export async function POST(
     const { song_id, position } = await request.json();
     const supabase = createRouteHandlerClient({ cookies });
 
-    // Get current user
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    
-    if (userError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // Allow anonymous users to add songs to setlists
+
+    if (!song_id) {
+      return NextResponse.json({ error: 'song_id is required' }, { status: 400 });
     }
 
     // Check if setlist exists and is not locked
@@ -32,6 +31,18 @@ export async function POST(
       return NextResponse.json({ error: 'Setlist is locked' }, { status: 403 });
     }
 
+    // Check if song already exists in this setlist
+    const { data: existingSong } = await supabase
+      .from('setlist_songs')
+      .select('id')
+      .eq('setlist_id', params.id)
+      .eq('song_id', song_id)
+      .single();
+
+    if (existingSong) {
+      return NextResponse.json({ error: 'Song already in setlist' }, { status: 409 });
+    }
+
     // Get next position if not provided
     let songPosition = position;
     if (!songPosition) {
@@ -46,7 +57,7 @@ export async function POST(
       songPosition = (maxPosition?.position || 0) + 1;
     }
 
-    // Add song to setlist
+    // Add song to setlist (anonymous users allowed)
     const { data: setlistSong, error } = await supabase
       .from('setlist_songs')
       .insert({

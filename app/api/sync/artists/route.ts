@@ -3,6 +3,8 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { spotifyAPI } from '@/libs/spotify-api';
 
+export const runtime = 'nodejs';
+
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');

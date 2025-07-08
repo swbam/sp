@@ -13,16 +13,24 @@
     },
     "app/api/search/**": {
       "maxDuration": 10
+    },
+    "app/api/sync/finalized/route.ts": {
+      "maxDuration": 300
+    },
+    "app/api/sync/comprehensive/route.ts": {
+      "maxDuration": 300
+    },
+    "app/api/sync/test-spotify/route.ts": {
+      "maxDuration": 60
+    },
+    "app/api/setlists/import/route.ts": {
+      "maxDuration": 60
     }
   },
   "crons": [
     {
-      "path": "/api/sync/shows?secret=$CRON_SECRET",
+      "path": "/api/sync/finalized",
       "schedule": "0 */6 * * *"
-    },
-    {
-      "path": "/api/sync/artists?secret=$CRON_SECRET", 
-      "schedule": "0 2 * * *"
     }
   ],
   "headers": [
@@ -62,18 +70,30 @@
         {
           "key": "Cache-Control",
           "value": "s-maxage=60, stale-while-revalidate=300"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
         }
       ]
     }
   ],
   "rewrites": [
     {
-      "source": "/sitemap.xml",
-      "destination": "/api/sitemap"
+      "source": "/robots.txt",
+      "destination": "/api/robots"
     },
     {
-      "source": "/robots.txt", 
-      "destination": "/api/robots"
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
     }
   ]
 }

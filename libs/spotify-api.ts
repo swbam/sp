@@ -1,3 +1,5 @@
+export const runtime = 'nodejs';
+
 class SpotifyAPI {
   private clientId: string;
   private clientSecret: string;

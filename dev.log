@@ -1,0 +1,20 @@
+
+> mysetlist@1.0.0 dev
+> next dev --turbo
+
+  ▲ Next.js 14.2.28 (turbo)
+  - Local:        http://localhost:3000
+  - Environments: .env.local
+  - Experiments (use with caution):
+    · turbo
+
+ ✓ Starting...
+ ✓ Compiled in 103ms
+ ✓ Ready in 618ms
+ ✓ Compiled /api/shows in 111ms
+ GET /api/shows 200 in 404ms
+ ✓ Compiled /api/shows/[id] in 27ms
+ GET /api/shows/b745c87d-877e-42b3-b281-dbe473071caa 200 in 321ms
+ ✓ Compiled /api/votes in 26ms
+ POST /api/votes 200 in 273ms
+[?25h

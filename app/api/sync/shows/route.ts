@@ -4,6 +4,8 @@ import { NextResponse } from 'next/server';
 import { ticketmasterAPI } from '@/libs/ticketmaster-api';
 import { spotifyAPI } from '@/libs/spotify-api';
 
+export const runtime = 'nodejs';
+
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret');

@@ -7,6 +7,7 @@ import { ShowHeader } from './components/ShowHeader';
 import { ShowInfo } from './components/ShowInfo';
 import { SetlistVoting } from './components/SetlistVoting';
 import { VenueInfo } from './components/VenueInfo';
+import { ActualSetlistDisplay } from './components/ActualSetlistDisplay';
 
 interface ShowPageProps {
   params: {
@@ -114,13 +115,27 @@ export default async function ShowPage({ params }: ShowPageProps) {
       <div className="px-6 pb-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
           {/* Main Content - Predicted Setlist */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-8">
             <SetlistVoting
               showId={params.id}
               initialSongs={setlistSongs}
               isLocked={setlist?.is_locked || false}
               artistName={transformedShow.artist?.name || 'Unknown Artist'}
             />
+            
+            {/* Actual Setlist for Completed Shows */}
+            {transformedShow.status === 'completed' && (
+              <div className="bg-neutral-800 rounded-lg p-6">
+                <h3 className="text-white text-xl font-semibold mb-6">
+                  Actual Setlist
+                </h3>
+                <ActualSetlistDisplay 
+                  showId={params.id}
+                  artistName={transformedShow.artist?.name}
+                  showDate={transformedShow.date}
+                />
+              </div>
+            )}
           </div>
 
           {/* Sidebar */}
