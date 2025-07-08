@@ -6,6 +6,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 
 import { useAuthModal } from '@/hooks/useAuthModal';
 import { useUser } from '@/hooks/useUser';
+import { useSafeNavigation } from './SafeNavigation';
 
 import type { UserArtistFollow } from '@/types';
 
@@ -17,6 +18,7 @@ export const Library: React.FC<LibraryProps> = ({ followedArtists }) => {
   //* Hooks initialization
   const authModal = useAuthModal();
   const { user } = useUser();
+  const { navigateTo } = useSafeNavigation();
 
   const onClick = () => {
     if (!user) {
@@ -24,7 +26,7 @@ export const Library: React.FC<LibraryProps> = ({ followedArtists }) => {
     }
 
     // Navigate to search to follow more artists
-    window.location.href = '/search';
+    navigateTo('/search');
   };
 
   return (
@@ -51,7 +53,7 @@ export const Library: React.FC<LibraryProps> = ({ followedArtists }) => {
             <div
               key={follow.artist_id}
               className="flex items-center gap-x-3 cursor-pointer hover:bg-neutral-800 p-2 rounded-md transition"
-              onClick={() => window.location.href = `/artists/${follow.artist?.slug}`}
+              onClick={() => navigateTo(`/artists/${follow.artist?.slug}`)}
             >
               {follow.artist?.image_url ? (
                 <Image

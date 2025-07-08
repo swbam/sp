@@ -1,6 +1,5 @@
 import { HeroSearch } from '@/components/HeroSearch';
-import { TrendingSection } from '@/components/TrendingSection';
-import { FeaturedSection } from '@/components/FeaturedSection';
+import { ConditionalContent } from './components/ConditionalContent';
 
 export const revalidate = 0;
 
@@ -24,12 +23,8 @@ export default async function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="px-6 pb-8 -mt-8 relative z-20 space-y-16">
-        {/* Featured Content */}
-        <FeaturedSection />
-        
-        {/* Trending Content */}
-        <TrendingSection />
+      <div className="px-6 pb-8 -mt-8 relative z-20">
+        <ConditionalContent />
       </div>
     </div>
   );

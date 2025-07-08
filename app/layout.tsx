@@ -7,6 +7,7 @@ import { UserProvider } from '@/providers/UserProvider';
 import { ModalProvider } from '@/providers/ModalProvider';
 import { ToasterProvider } from '@/providers/ToasterProvider';
 import { RealtimeProvider } from '@/providers/RealtimeProvider';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import type { Metadata, Viewport } from 'next';
 
 // Optimized font loading with display swap
@@ -91,8 +92,10 @@ export default async function RootLayout({
         <SupabaseProvider>
           <UserProvider>
             <RealtimeProvider>
-              <ModalProvider />
-              <Sidebar>{children}</Sidebar>
+              <ErrorBoundary>
+                <ModalProvider />
+                <Sidebar>{children}</Sidebar>
+              </ErrorBoundary>
             </RealtimeProvider>
           </UserProvider>
         </SupabaseProvider>

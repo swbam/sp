@@ -11,7 +11,8 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith('/api/trending') ||
     pathname.startsWith('/api/shows') ||
     pathname.startsWith('/api/search') ||
-    pathname.includes('.')
+    pathname.includes('.') ||
+    pathname.startsWith('/favicon')
   ) {
     return NextResponse.next();
   }
@@ -33,9 +34,9 @@ export async function middleware(req: NextRequest) {
   }
 
   // Initialize Supabase client for auth-required routes
-  const supabase = createMiddlewareClient({ req, res });
-  
   try {
+    const supabase = createMiddlewareClient({ req, res });
+    
     // Only check session for protected routes
     if (pathname.startsWith('/account') || pathname.startsWith('/admin')) {
       const { data: { session } } = await supabase.auth.getSession();
@@ -55,7 +56,15 @@ export async function middleware(req: NextRequest) {
     }
   } catch (error) {
     console.error('Middleware auth error:', error);
-    // Continue without blocking the request
+    // Continue without blocking the request for non-critical routes
+    if (!pathname.startsWith('/account') && !pathname.startsWith('/admin')) {
+      return NextResponse.next({
+        request: {
+          headers: req.headers,
+        },
+        headers,
+      });
+    }
   }
 
   return NextResponse.next({

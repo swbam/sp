@@ -43,15 +43,15 @@ export const AuthModal = () => {
       <Auth
         theme="dark"
         magicLink
-        providers={['github']}
+        providers={['spotify']}
         supabaseClient={supabaseClient}
         appearance={{
           theme: ThemeSupa,
           variables: {
             default: {
               colors: {
-                brand: '#404040',
-                brandAccent: '#1DB954',
+                brand: '#1DB954',
+                brandAccent: '#1ed760',
               },
             },
           },
