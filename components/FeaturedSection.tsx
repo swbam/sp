@@ -25,20 +25,15 @@ export const FeaturedSection: React.FC<FeaturedSectionProps> = ({ className = ''
   useEffect(() => {
     const loadFeaturedContent = async () => {
       try {
-        // Load featured shows
-        const showsResponse = await fetch('/api/shows?limit=6&status=upcoming&featured=true');
-        const showsData = await showsResponse.json();
+        // Load real featured content (top US artists and stadium shows)
+        const featuredResponse = await fetch('/api/featured');
+        const featuredData = await featuredResponse.json();
         
-        if (showsResponse.ok) {
-          setFeaturedShows(showsData.shows || []);
-        }
-
-        // Load featured artists
-        const artistsResponse = await fetch('/api/artists?limit=8&sort=followers&verified=true');
-        const artistsData = await artistsResponse.json();
-        
-        if (artistsResponse.ok) {
-          setFeaturedArtists(artistsData.artists || []);
+        if (featuredResponse.ok) {
+          setFeaturedShows(featuredData.featured_shows || []);
+          setFeaturedArtists(featuredData.featured_artists || []);
+          
+          console.log('Featured content loaded:', featuredData.sync_stats);
         }
 
         // Load stats
@@ -156,7 +151,7 @@ export const FeaturedSection: React.FC<FeaturedSectionProps> = ({ className = ''
         <section>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-white text-2xl font-semibold">
-              🌟 Featured Shows
+              🏟️ Major Venue Shows
             </h2>
             <a
               href="/shows"
@@ -182,7 +177,7 @@ export const FeaturedSection: React.FC<FeaturedSectionProps> = ({ className = ''
         <section>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-white text-2xl font-semibold">
-              ✨ Verified Artists
+              🎤 Top US Artists
             </h2>
             <a
               href="/search"

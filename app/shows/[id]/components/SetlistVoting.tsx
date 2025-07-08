@@ -4,13 +4,14 @@ import { useState, useEffect } from 'react';
 import { VoteButton } from '@/components/VoteButton';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
-import { useUser } from '@/hooks/useUser';
-import type { SetlistSongWithDetails, Song } from '@/types';
+import { useRealtimeSetlist } from '@/hooks/useRealtimeSetlist';
+import { useRealtimeVoting } from '@/hooks/useRealtimeVoting';
+import type { SetlistSong, Song } from '@/types';
 import toast from 'react-hot-toast';
 
 interface SetlistVotingProps {
   showId: string;
-  initialSongs: SetlistSongWithDetails[];
+  initialSongs: SetlistSong[];
   isLocked: boolean;
   artistName: string;
 }
@@ -21,95 +22,59 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
   isLocked,
   artistName,
 }) => {
-  const { user } = useUser();
-  const [songs, setSongs] = useState<SetlistSongWithDetails[]>(initialSongs);
+  const { songs, isLoading: isRefreshing } = useRealtimeSetlist({ showId, initialSongs });
+  const { vote, votingStates } = useRealtimeVoting();
   const [isAddingMode, setIsAddingMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Song[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isAddingSong, setIsAddingSong] = useState(false);
 
-  // Sort songs by vote score
+  // Sort songs by upvotes
   const sortedSongs = [...songs].sort((a, b) => {
-    const scoreA = a.upvotes - a.downvotes;
-    const scoreB = b.upvotes - b.downvotes;
-    return scoreB - scoreA;
+    return b.upvotes - a.upvotes;
   });
 
-  // Search for songs
+  // Load complete artist catalog when adding mode is enabled
   useEffect(() => {
-    if (!searchQuery.trim() || searchQuery.length < 2) {
+    if (!isAddingMode) {
       setSearchResults([]);
       return;
     }
 
-    const searchSongs = async () => {
+    const loadArtistCatalog = async () => {
       setIsSearching(true);
       try {
-        const response = await fetch(
-          `/api/songs/search?q=${encodeURIComponent(searchQuery)}&artist=${encodeURIComponent(artistName)}`
-        );
+        // Get artist slug from the show URL or artist name
+        const artistSlug = artistName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+        const response = await fetch(`/api/artists/${artistSlug}/catalog`);
+        
         if (response.ok) {
           const data = await response.json();
-          setSearchResults(data.songs || []);
+          let allSongs = data.songs || [];
+          
+          // Filter by search query if provided
+          if (searchQuery.trim()) {
+            allSongs = allSongs.filter((song: Song) => 
+              song.title.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+          }
+          
+          setSearchResults(allSongs);
         }
       } catch (error) {
-        console.error('Search error:', error);
+        console.error('Catalog load error:', error);
       } finally {
         setIsSearching(false);
       }
     };
 
-    const timeoutId = setTimeout(searchSongs, 300);
-    return () => clearTimeout(timeoutId);
-  }, [searchQuery, artistName]);
+    loadArtistCatalog();
+  }, [isAddingMode, searchQuery, artistName]);
 
-  const handleVote = async (songId: string, voteType: 'up' | 'down') => {
-    // Allow anonymous voting as per PRD requirements
-    try {
-      const response = await fetch('/api/votes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          setlist_song_id: songId,
-          vote_type: voteType === 'up' ? 'upvote' : 'downvote',
-        }),
-      });
-
-      if (response.ok) {
-        // Update local state optimistically
-        setSongs(prevSongs =>
-          prevSongs.map(song => {
-            if (song.id === songId) {
-              // Calculate new vote counts based on the vote type
-              let newUpvotes = song.upvotes;
-              let newDownvotes = song.downvotes;
-              
-              if (voteType === 'up') {
-                newUpvotes += 1;
-              } else {
-                newDownvotes += 1;
-              }
-
-              return {
-                ...song,
-                upvotes: newUpvotes,
-                downvotes: newDownvotes,
-              };
-            }
-            return song;
-          })
-        );
-        toast.success('Vote recorded!');
-      } else {
-        throw new Error('Vote failed');
-      }
-    } catch (error) {
-      console.error('Vote error:', error);
-      toast.error('Failed to submit vote');
-    }
+  const handleVote = async (songId: string) => {
+    // Use the real-time voting hook for upvotes only
+    await vote(songId, 'up');
   };
 
   const handleAddSong = async (song: Song) => {
@@ -129,18 +94,7 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
 
       if (response.ok) {
         const data = await response.json();
-        const newSetlistSong: SetlistSongWithDetails = {
-          id: data.id,
-          setlist_id: data.setlist_id,
-          song_id: song.id,
-          position: data.position,
-          upvotes: 0,
-          downvotes: 0,
-          created_at: data.created_at,
-          song: song,
-        };
-
-        setSongs(prev => [...prev, newSetlistSong]);
+        // Song addition will be handled by real-time updates
         setIsAddingMode(false);
         setSearchQuery('');
         setSearchResults([]);
@@ -264,8 +218,7 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
 
               <VoteButton
                 upvotes={item.upvotes}
-                downvotes={item.downvotes}
-                onVote={(type) => handleVote(item.id, type)}
+                onVote={() => handleVote(item.id)}
                 disabled={isLocked}
               />
             </div>

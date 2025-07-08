@@ -208,7 +208,7 @@ export async function POST(request: Request) {
         const artistData = {
           name: artistName,
           slug: artistName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''),
-          image_url: '/images/music-placeholder.png',
+          image_url: null, // Use null instead of placeholder path to avoid invalid URLs
           genres: ['Pop'], // Default genre - in real app would come from Spotify
           followers: Math.floor(Math.random() * 1000000) + 100000,
           verified: true

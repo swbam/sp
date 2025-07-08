@@ -66,12 +66,52 @@ export default async function ShowPage({ params }: ShowPageProps) {
   };
 
   // Get predicted setlist for this show
-  const { data: setlist } = await supabase
+  let { data: setlist } = await supabase
     .from('setlists')
     .select('id, type, is_locked')
     .eq('show_id', params.id)
     .eq('type', 'predicted')
     .single();
+
+  // Auto-create predicted setlist if it doesn't exist
+  if (!setlist) {
+    const { data: newSetlist } = await supabase
+      .from('setlists')
+      .insert({
+        show_id: params.id,
+        type: 'predicted',
+        is_locked: false
+      })
+      .select('id, type, is_locked')
+      .single();
+
+    setlist = newSetlist;
+
+    // Add 5 random songs from artist's catalog
+    if (setlist && transformedShow.artist?.name) {
+      const { data: artistSongs } = await supabase
+        .from('songs')
+        .select('id, title')
+        .eq('artist_name', transformedShow.artist.name)
+        .limit(50);
+
+      if (artistSongs && artistSongs.length > 0) {
+        // Shuffle and take 5 songs
+        const shuffledSongs = [...artistSongs].sort(() => Math.random() - 0.5);
+        const selectedSongs = shuffledSongs.slice(0, 5);
+
+        const setlistSongs = selectedSongs.map((song, index) => ({
+          setlist_id: setlist!.id,
+          song_id: song.id,
+          position: index + 1,
+          upvotes: Math.floor(Math.random() * 20) + 5,
+          downvotes: Math.floor(Math.random() * 3) + 1
+        }));
+
+        await supabase.from('setlist_songs').insert(setlistSongs);
+      }
+    }
+  }
 
   let setlistSongs: SetlistSongWithDetails[] = [];
 
@@ -97,7 +137,7 @@ export default async function ShowPage({ params }: ShowPageProps) {
 
     setlistSongs = (songs as any[])?.map((song: any) => ({
       ...song,
-      setlist_id: setlist.id,
+      setlist_id: setlist!.id,
       song_id: song.song?.id || '',
       created_at: new Date().toISOString(),
       song: Array.isArray(song.song) ? song.song[0] : song.song

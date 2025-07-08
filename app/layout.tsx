@@ -6,6 +6,7 @@ import { SupabaseProvider } from '@/providers/SupabaseProvider';
 import { UserProvider } from '@/providers/UserProvider';
 import { ModalProvider } from '@/providers/ModalProvider';
 import { ToasterProvider } from '@/providers/ToasterProvider';
+import { RealtimeProvider } from '@/providers/RealtimeProvider';
 import type { Metadata, Viewport } from 'next';
 
 // Optimized font loading with display swap
@@ -89,8 +90,10 @@ export default async function RootLayout({
         <ToasterProvider />
         <SupabaseProvider>
           <UserProvider>
-            <ModalProvider />
-            <Sidebar>{children}</Sidebar>
+            <RealtimeProvider>
+              <ModalProvider />
+              <Sidebar>{children}</Sidebar>
+            </RealtimeProvider>
           </UserProvider>
         </SupabaseProvider>
         <Analytics />

@@ -2,11 +2,9 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const limit = parseInt(searchParams.get('limit') || '50');
-  const withUpcomingShows = searchParams.get('with_shows') === 'true';
+export const runtime = 'nodejs';
 
+export async function GET() {
   try {
     const supabase = createRouteHandlerClient({ cookies });
 
@@ -17,75 +15,69 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // Get user's followed artists
-    const { data: following, error } = await supabase
-      .from('user_artist_follows')
+    // Get user's followed artists with upcoming shows
+    const { data: follows, error } = await supabase
+      .from('user_artists')
       .select(`
+        artist_id,
         created_at,
-        artist:artists (
+        artist:artists(
           id,
           name,
           slug,
           image_url,
-          genres,
+          verified,
           followers,
-          verified
+          genres
         )
       `)
       .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(limit);
+      .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Following fetch error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error('Error fetching followed artists:', error);
+      return NextResponse.json({ error: 'Failed to fetch followed artists' }, { status: 500 });
     }
 
-    // Transform the data
-    const followedArtists = (following || []).map((follow: any) => {
-      return {
-        ...follow.artist,
-        followed_at: follow.created_at
-      };
-    });
-
-    // If user wants upcoming shows, fetch them separately
-    if (withUpcomingShows && followedArtists.length > 0) {
-      const artistIds = followedArtists.map(artist => artist.id);
-      
-      const { data: upcomingShows } = await supabase
-        .from('shows')
-        .select(`
-          id,
-          name,
-          date,
-          start_time,
-          status,
-          artist_id,
-          venue:venues (
-            name,
-            city,
-            state
-          )
-        `)
-        .in('artist_id', artistIds)
-        .eq('status', 'upcoming')
-        .gte('date', new Date().toISOString().split('T')[0])
-        .order('date', { ascending: true });
-
-      // Add upcoming shows to each artist
-      followedArtists.forEach(artist => {
-        const artistShows = upcomingShows?.filter(show => show.artist_id === artist.id) || [];
-        artist.upcoming_shows = artistShows;
-      });
+    // Get upcoming shows for followed artists
+    const artistIds = follows?.map(f => f.artist_id) || [];
+    
+    if (artistIds.length === 0) {
+      return NextResponse.json({ artists: [] });
     }
+
+    const { data: shows, error: showsError } = await supabase
+      .from('shows')
+      .select(`
+        id,
+        artist_id,
+        name,
+        date,
+        venue:venues(name, city, state)
+      `)
+      .in('artist_id', artistIds)
+      .gte('date', new Date().toISOString().split('T')[0])
+      .eq('status', 'upcoming')
+      .order('date', { ascending: true });
+
+    if (showsError) {
+      console.error('Error fetching shows:', showsError);
+      // Continue without shows data
+    }
+
+    // Combine artists with their upcoming shows
+    const artistsWithShows = follows?.map(follow => ({
+      ...follow.artist,
+      upcoming_shows: shows?.filter(show => show.artist_id === follow.artist_id) || []
+    })) || [];
 
     return NextResponse.json({ 
-      following: followedArtists,
-      count: followedArtists.length 
+      artists: artistsWithShows,
+      total: follows?.length || 0
     });
+
   } catch (error) {
-    console.error('Unexpected error:', error);
+    console.error('Error in following API:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

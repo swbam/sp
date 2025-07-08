@@ -49,17 +49,17 @@ export const ShowHeader: React.FC<ShowHeaderProps> = ({ show }) => {
       <div className="flex flex-col gap-y-2 mt-4 md:mt-0 flex-1">
         <p className="hidden md:block font-semibold text-sm">Concert</p>
         
+        {/* Artist name as main headline */}
         <h1 className="text-white text-4xl sm:text-5xl lg:text-6xl font-bold">
-          {show.name}
+          {show.artist?.name}
         </h1>
         
+        {/* Show/tour name as secondary headline */}
+        <h2 className="text-neutral-300 text-lg sm:text-xl lg:text-2xl font-medium">
+          {show.name}
+        </h2>
+        
         <div className="flex flex-col gap-y-1 text-sm">
-          <Link
-            href={`/artists/${show.artist?.slug}`}
-            className="text-neutral-300 hover:text-white transition font-medium"
-          >
-            {show.artist?.name}
-          </Link>
           <p className="text-neutral-400">
             {formatDate(show.date)} • {formatTime(show.start_time)}
           </p>

@@ -76,6 +76,11 @@ class SpotifyAPI {
     return data.items;
   }
 
+  async getAlbumTracks(albumId: string) {
+    const data = await this.makeRequest(`/albums/${albumId}/tracks`);
+    return data.items;
+  }
+
   async searchTracks(query: string, artist?: string, limit = 20) {
     let searchQuery = query;
     if (artist) {
