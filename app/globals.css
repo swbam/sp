@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Performance optimizations */
+@layer base {
+  /* Optimize font rendering */
+  html {
+    font-display: swap;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Base styles for better performance */
+  html, body, :root {
+    height: 100%;
+    background-color: black;
+    color-scheme: dark;
+  }
+
+  /* Reduce layout shift */
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Optimize images */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Optimize focus indicators */
+  :focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Performance-optimized button styles */
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-black;
+  }
+
+  .btn-secondary {
+    @apply bg-neutral-700 hover:bg-neutral-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2 focus:ring-offset-black;
+  }
+
+  /* Card components */
+  .card {
+    @apply bg-neutral-800 rounded-lg p-6 shadow-lg;
+  }
+
+  .card-hover {
+    @apply transition-transform duration-200 hover:scale-105 focus-within:scale-105;
+  }
+
+  /* Loading states */
+  .skeleton {
+    @apply animate-pulse bg-neutral-700 rounded;
+  }
+
+  .loading-spinner {
+    @apply animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full;
+  }
+}
+
+@layer utilities {
+  /* Custom scrollbar utilities */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom scrollbar for webkit browsers */
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: rgb(38 38 38);
+    border-radius: 4px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: rgb(115 115 115);
+    border-radius: 4px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: rgb(163 163 163);
+  }
+
+  /* Performance utilities */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-auto {
+    will-change: auto;
+  }
+
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-spin,
+    .animate-pulse,
+    .animate-bounce {
+      animation: none;
+    }
+
+    .transition-all,
+    .transition-colors,
+    .transition-opacity,
+    .transition-transform {
+      transition: none;
+    }
+  }
+
+  /* Optimize text selection */
+  .select-none {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+  /* GPU acceleration for animations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Optimize for touch devices */
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  /* Containment for performance */
+  .contain-layout {
+    contain: layout;
+  }
+
+  .contain-style {
+    contain: style;
+  }
+
+  .contain-size {
+    contain: size;
+  }
+
+  /* Critical rendering path optimization */
+  .above-fold {
+    content-visibility: visible;
+  }
+
+  .below-fold {
+    content-visibility: auto;
+    contain-intrinsic-size: 200px;
+  }
+}
