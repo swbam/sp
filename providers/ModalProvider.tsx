@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-import { AuthModal } from '@/components/AuthModal';
+import AuthModal from '@/components/AuthModal';
 
 export const ModalProvider: React.FC = () => {
   const [isMounted, setIsMounted] = useState(false);

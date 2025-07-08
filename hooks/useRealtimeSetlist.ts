@@ -51,7 +51,7 @@ export const useRealtimeSetlist = ({
       setSongs(prevSongs => 
         prevSongs.map(song => 
           song.id === newRecord.id 
-            ? { ...song, upvotes: newRecord.upvotes }
+            ? { ...song, upvotes: newRecord.upvotes, downvotes: newRecord.downvotes }
             : song
         )
       );
@@ -68,6 +68,7 @@ export const useRealtimeSetlist = ({
             song_id: newRecord.song_id,
             position: newRecord.position,
             upvotes: newRecord.upvotes || 0,
+            downvotes: newRecord.downvotes || 0,
             created_at: newRecord.created_at,
             song: newRecord.song
           };

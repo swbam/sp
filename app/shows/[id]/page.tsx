@@ -9,6 +9,9 @@ import { SetlistVoting } from './components/SetlistVoting';
 import { VenueInfo } from './components/VenueInfo';
 import { ActualSetlistDisplay } from './components/ActualSetlistDisplay';
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 interface ShowPageProps {
   params: {
     id: string;
@@ -161,6 +164,7 @@ export default async function ShowPage({ params }: ShowPageProps) {
               initialSongs={setlistSongs}
               isLocked={setlist?.is_locked || false}
               artistName={transformedShow.artist?.name || 'Unknown Artist'}
+              artistSlug={transformedShow.artist?.slug}
             />
             
             {/* Actual Setlist for Completed Shows */}

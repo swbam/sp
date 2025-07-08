@@ -4,17 +4,21 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
-    const { setlist_song_id } = await request.json();
+    const { setlist_song_id, vote_type } = await request.json();
     const supabase = createRouteHandlerClient({ cookies });
 
-    if (!setlist_song_id) {
-      return NextResponse.json({ error: 'Missing setlist_song_id' }, { status: 400 });
+    if (!setlist_song_id || !vote_type) {
+      return NextResponse.json({ error: 'Missing setlist_song_id or vote_type' }, { status: 400 });
     }
 
-    // Get current vote count
+    if (!['up', 'down'].includes(vote_type)) {
+      return NextResponse.json({ error: 'Invalid vote_type. Must be "up" or "down"' }, { status: 400 });
+    }
+
+    // Get current vote counts
     const { data: setlistSong, error: fetchError } = await supabase
       .from('setlist_songs')
-      .select('upvotes')
+      .select('upvotes, downvotes')
       .eq('id', setlist_song_id)
       .single();
 
@@ -22,13 +26,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Setlist song not found' }, { status: 404 });
     }
 
-    // Increment upvotes (anonymous voting)
+    // Update vote counts based on vote type
     const currentUpvotes = setlistSong.upvotes || 0;
-    const newUpvotes = currentUpvotes + 1;
+    const currentDownvotes = setlistSong.downvotes || 0;
+    
+    let updateData: { upvotes?: number; downvotes?: number } = {};
+    
+    if (vote_type === 'up') {
+      updateData.upvotes = currentUpvotes + 1;
+    } else if (vote_type === 'down') {
+      updateData.downvotes = currentDownvotes + 1;
+    }
 
     const { error: updateError } = await supabase
       .from('setlist_songs')
-      .update({ upvotes: newUpvotes })
+      .update(updateData)
       .eq('id', setlist_song_id);
 
     if (updateError) {
@@ -38,7 +50,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ 
       success: true, 
-      upvotes: newUpvotes
+      upvotes: vote_type === 'up' ? updateData.upvotes : currentUpvotes,
+      downvotes: vote_type === 'down' ? updateData.downvotes : currentDownvotes
     });
 
   } catch (error) {
@@ -61,7 +74,7 @@ export async function GET(request: Request) {
 
     const { data: setlistSongs, error } = await supabase
       .from('setlist_songs')
-      .select('id, upvotes')
+      .select('id, upvotes, downvotes')
       .in('id', setlistSongIds);
 
     if (error) {
@@ -72,10 +85,11 @@ export async function GET(request: Request) {
     // Convert to object for easy lookup
     const voteCounts = setlistSongs?.reduce((acc, song) => {
       acc[song.id] = {
-        upvotes: song.upvotes || 0
+        upvotes: song.upvotes || 0,
+        downvotes: song.downvotes || 0
       };
       return acc;
-    }, {} as Record<string, { upvotes: number }>) || {};
+    }, {} as Record<string, { upvotes: number; downvotes: number }>) || {};
 
     return NextResponse.json({ voteCounts });
 

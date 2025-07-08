@@ -8,6 +8,8 @@ import { ModalProvider } from '@/providers/ModalProvider';
 import { ToasterProvider } from '@/providers/ToasterProvider';
 import { RealtimeProvider } from '@/providers/RealtimeProvider';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import WebVitalsMonitor from '@/components/WebVitalsMonitor';
+import ProductionPerformanceMonitor from '@/components/ProductionPerformanceMonitor';
 import type { Metadata, Viewport } from 'next';
 
 // Optimized font loading with display swap
@@ -99,6 +101,8 @@ export default async function RootLayout({
             </RealtimeProvider>
           </UserProvider>
         </SupabaseProvider>
+        <WebVitalsMonitor />
+        <ProductionPerformanceMonitor />
         <Analytics />
       </body>
     </html>

@@ -5,14 +5,24 @@
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
+    "build:analyze": "ANALYZE=true npm run build",
+    "build:production": "NODE_ENV=production npm run build",
     "start": "next start",
+    "start:production": "NODE_ENV=production npm run start",
     "lint": "next lint --fix",
     "lint:check": "next lint",
     "type-check": "tsc --noEmit",
-    "build:analyze": "ANALYZE=true npm run build",
     "test": "echo \"Tests coming soon\" && exit 0",
+    "test:performance": "node scripts/performance-test.js",
+    "monitor:performance": "node scripts/performance-monitor.js",
+    "monitor:enhanced": "node scripts/enhanced-performance-monitor.js",
+    "optimize:database": "node scripts/database-optimization.js",
+    "optimize:production": "node scripts/optimize-production.js",
+    "validate:performance": "node scripts/validate-performance-optimizations.js",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\""
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "optimize": "npm run lint && npm run type-check && npm run build:analyze",
+    "precommit": "npm run format && npm run lint:check && npm run type-check"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.4",
@@ -47,6 +57,8 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^14.0.0",
+    "chrome-launcher": "^1.2.0",
+    "lighthouse": "^12.7.1",
     "supabase": "^1.68.6",
     "typescript": "^5.1.6"
   },

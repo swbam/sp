@@ -63,7 +63,7 @@ module.exports = {
   plugins: [],
   // Performance optimizations
   corePlugins: {
-    // Disable unused plugins
+    // Disable unused plugins for better performance
     preflight: true,
     container: false,
     accessibility: true,
@@ -73,6 +73,24 @@ module.exports = {
     divideOpacity: false,
     placeholderOpacity: false,
     textOpacity: false,
+    ringOpacity: false,
+    blur: true,
+    brightness: false,
+    contrast: false,
+    dropShadow: false,
+    grayscale: false,
+    hueRotate: false,
+    invert: false,
+    saturate: false,
+    sepia: false,
+    backdropBlur: false,
+    backdropBrightness: false,
+    backdropContrast: false,
+    backdropGrayscale: false,
+    backdropHueRotate: false,
+    backdropInvert: false,
+    backdropSaturate: false,
+    backdropSepia: false,
   },
   // Tree shaking optimization
   future: {

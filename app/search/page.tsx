@@ -1,7 +1,7 @@
 import { Header } from '@/components/Header';
 import { SearchInput } from '@/components/SearchInput';
 
-import { SearchContent } from './components/SearchContent';
+import SearchContent from './components/SearchContent';
 
 export const revalidate = 0;
 
@@ -29,7 +29,7 @@ const Search = async ({ searchParams }: SearchProps) => {
           <SearchInput />
         </div>
       </Header>
-      <SearchContent searchQuery={searchParams.q} />
+      <SearchContent searchParams={searchParams} />
     </div>
   );
 };

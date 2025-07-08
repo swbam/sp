@@ -4,8 +4,17 @@ import { useUser } from '@/hooks/useUser';
 import { SpotifyDashboard } from './SpotifyDashboard';
 import { TrendingSection } from '@/components/TrendingSection';
 import { FeaturedSection } from '@/components/FeaturedSection';
+import type { ShowWithDetails, Artist } from '@/types';
 
-export const ConditionalContent = () => {
+interface ConditionalContentProps {
+  initialTrendingShows?: ShowWithDetails[];
+  initialTrendingArtists?: Artist[];
+}
+
+export const ConditionalContent: React.FC<ConditionalContentProps> = ({ 
+  initialTrendingShows = [],
+  initialTrendingArtists = []
+}) => {
   const { user } = useUser();
 
   if (user) {
@@ -20,7 +29,10 @@ export const ConditionalContent = () => {
         <FeaturedSection />
         
         {/* Trending Content */}
-        <TrendingSection />
+        <TrendingSection 
+          initialTrendingShows={initialTrendingShows}
+          initialTrendingArtists={initialTrendingArtists}
+        />
       </div>
     );
   }
@@ -31,7 +43,10 @@ export const ConditionalContent = () => {
       <FeaturedSection />
       
       {/* Trending Content */}
-      <TrendingSection />
+      <TrendingSection 
+        initialTrendingShows={initialTrendingShows}
+        initialTrendingArtists={initialTrendingArtists}
+      />
     </div>
   );
 }; 

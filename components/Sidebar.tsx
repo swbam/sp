@@ -8,6 +8,7 @@ import { useMemo } from 'react';
 import { HiHome } from 'react-icons/hi';
 import { BiSearch } from 'react-icons/bi';
 import { FaCalendarAlt } from 'react-icons/fa';
+import { TbTrendingUp } from 'react-icons/tb';
 
 import { Box } from './Box';
 import { SidebarItem } from './SidebarItem';
@@ -43,6 +44,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
         label: 'Shows',
         active: pathname.startsWith('/shows'),
         href: '/shows',
+      },
+      {
+        icon: TbTrendingUp,
+        label: 'Trending',
+        active: pathname.startsWith('/trending'),
+        href: '/trending',
       },
     ],
     [pathname]

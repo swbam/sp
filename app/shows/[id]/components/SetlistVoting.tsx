@@ -14,6 +14,7 @@ interface SetlistVotingProps {
   initialSongs: SetlistSong[];
   isLocked: boolean;
   artistName: string;
+  artistSlug?: string;
 }
 
 export const SetlistVoting: React.FC<SetlistVotingProps> = ({
@@ -21,6 +22,7 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
   initialSongs,
   isLocked,
   artistName,
+  artistSlug,
 }) => {
   const { songs, isLoading: isRefreshing } = useRealtimeSetlist({ showId, initialSongs });
   const { vote, votingStates } = useRealtimeVoting();
@@ -45,9 +47,9 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
     const loadArtistCatalog = async () => {
       setIsSearching(true);
       try {
-        // Get artist slug from the show URL or artist name
-        const artistSlug = artistName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
-        const response = await fetch(`/api/artists/${artistSlug}/catalog`);
+        // Use provided artist slug or fallback to generated slug
+        const slugToUse = artistSlug || artistName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+        const response = await fetch(`/api/artists/${slugToUse}/catalog`);
         
         if (response.ok) {
           const data = await response.json();
@@ -61,6 +63,8 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
           }
           
           setSearchResults(allSongs);
+        } else {
+          console.error('Failed to load artist catalog:', response.status);
         }
       } catch (error) {
         console.error('Catalog load error:', error);
@@ -70,11 +74,11 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
     };
 
     loadArtistCatalog();
-  }, [isAddingMode, searchQuery, artistName]);
+  }, [isAddingMode, searchQuery, artistName, artistSlug]);
 
-  const handleVote = async (songId: string) => {
-    // Use the real-time voting hook for upvotes only
-    await vote(songId, 'up');
+  const handleVote = async (songId: string, voteType: 'up' | 'down') => {
+    // Use the real-time voting hook for both up and down votes
+    await vote(songId, voteType);
   };
 
   const handleAddSong = async (song: Song) => {
@@ -218,7 +222,8 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
 
               <VoteButton
                 upvotes={item.upvotes}
-                onVote={() => handleVote(item.id)}
+                downvotes={item.downvotes}
+                onVote={(voteType) => handleVote(item.id, voteType)}
                 disabled={isLocked}
               />
             </div>

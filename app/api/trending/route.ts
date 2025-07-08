@@ -1,16 +1,32 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { 
+  sortShowsByTrending, 
+  sortArtistsByTrending, 
+  getTrendingTimeframeFilter,
+  applySpecialEventBoost,
+  getTrendingCategories
+} from '@/libs/trending-algorithms';
 
 // Cache configuration
 const CACHE_DURATION = 300; // 5 minutes
 const STALE_WHILE_REVALIDATE = 600; // 10 minutes
 
+// In-memory cache for trending data
+const cache = new Map();
+const CACHE_KEY_PREFIX = 'trending';
+
+function getCacheKey(type: string, timeframe: string, limit: number) {
+  return `${CACHE_KEY_PREFIX}:${type}:${timeframe}:${limit}`;
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const type = searchParams.get('type') || 'shows';
   const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50); // Cap at 50
-  const timeframe = searchParams.get('timeframe') || 'week';
+  const timeframe = searchParams.get('timeframe') as 'day' | 'week' | 'month' || 'week';
+  const category = searchParams.get('category'); // Optional category filter
 
   // Set cache headers for performance
   const headers = new Headers({
@@ -20,24 +36,18 @@ export async function GET(request: Request) {
   });
 
   try {
+    // Check in-memory cache first
+    const cacheKey = getCacheKey(type, timeframe, limit);
+    const cachedData = cache.get(cacheKey);
+    
+    if (cachedData && Date.now() - cachedData.timestamp < CACHE_DURATION * 1000) {
+      return NextResponse.json(cachedData.data, { headers });
+    }
+
     const supabase = createRouteHandlerClient({ cookies });
     
     // Calculate date range for trending
-    const now = new Date();
-    let startDate = new Date();
-    
-    switch (timeframe) {
-      case 'day':
-        startDate.setDate(now.getDate() - 1);
-        break;
-      case 'week':
-        startDate.setDate(now.getDate() - 7);
-        break;
-      case 'month':
-        startDate.setMonth(now.getMonth() - 1);
-        break;
-    }
-
+    const startDate = getTrendingTimeframeFilter(timeframe);
     const result: any = {};
 
     if (type === 'shows' || type === 'all') {
@@ -84,33 +94,17 @@ export async function GET(request: Request) {
       if (showsError) {
         console.error('Trending shows error:', showsError);
       } else {
-        // Calculate trending score for each show
-        const showsWithScore = (trendingShows || []).map(show => {
-          const totalVotes = show.setlists?.reduce((acc: number, setlist: any) => {
-            return acc + setlist.setlist_songs?.reduce((voteAcc: number, song: any) => {
-              return voteAcc + (song.upvotes || 0) + (song.downvotes || 0);
-            }, 0) || 0;
-          }, 0) || 0;
+        // Use advanced trending algorithm
+        const sortedShows = sortShowsByTrending(trendingShows || []);
+        
+        // Apply special event boosts
+        const showsWithBoosts = sortedShows.map(show => ({
+          ...show,
+          trending_score: applySpecialEventBoost(show, show.trending_score)
+        }));
 
-          // Calculate days until show
-          const daysUntilShow = Math.max(1, Math.ceil(
-            (new Date(show.date).getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
-          ));
-
-          // Trending score: more votes and sooner shows rank higher
-          const trendingScore = totalVotes / Math.log(daysUntilShow + 1);
-
-          return {
-            ...show,
-            trending_score: trendingScore,
-            total_votes: totalVotes
-          };
-        });
-
-        // Sort by trending score and take top results
-        result.trending_shows = showsWithScore
-          .sort((a, b) => b.trending_score - a.trending_score)
-          .slice(0, limit);
+        // Take top results
+        result.trending_shows = showsWithBoosts.slice(0, limit);
       }
     }
 
@@ -127,6 +121,7 @@ export async function GET(request: Request) {
           followers,
           verified,
           created_at,
+          updated_at,
           shows!inner (
             id,
             date,
@@ -140,27 +135,39 @@ export async function GET(request: Request) {
       if (artistsError) {
         console.error('Trending artists error:', artistsError);
       } else {
-        // Calculate trending score for artists
-        const artistsWithScore = (trendingArtists || []).map(artist => {
+        // Calculate upcoming shows count
+        const artistsWithUpcomingShows = (trendingArtists || []).map(artist => {
           const upcomingShows = artist.shows?.filter((show: any) => 
-            show.status === 'upcoming' && new Date(show.date) > now
+            show.status === 'upcoming' && new Date(show.date) > new Date()
           ).length || 0;
-
-          // Trending score: followers + upcoming shows boost
-          const trendingScore = (artist.followers || 0) + (upcomingShows * 1000);
 
           return {
             ...artist,
-            trending_score: trendingScore,
             upcoming_shows_count: upcomingShows
           };
         });
 
-        result.trending_artists = artistsWithScore
-          .sort((a, b) => b.trending_score - a.trending_score)
-          .slice(0, limit);
+        // Use advanced trending algorithm
+        const sortedArtists = sortArtistsByTrending(artistsWithUpcomingShows);
+        
+        result.trending_artists = sortedArtists.slice(0, limit);
       }
     }
+
+    // Add trending categories if requested
+    if (category === 'categories' && type === 'all') {
+      const categories = getTrendingCategories(
+        result.trending_shows || [],
+        result.trending_artists || []
+      );
+      result.categories = categories;
+    }
+
+    // Update cache
+    cache.set(cacheKey, {
+      data: result,
+      timestamp: Date.now()
+    });
 
     return NextResponse.json(result, { headers });
   } catch (error) {

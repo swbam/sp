@@ -7,6 +7,9 @@ import { ArtistHeader } from './components/ArtistHeader';
 import { ShowsList } from './components/ShowsList';
 import { ArtistStats } from './components/ArtistStats';
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 interface ArtistPageProps {
   params: {
     slug: string;

@@ -9,7 +9,15 @@ const nextConfig = {
   
   // Bundle optimization
   experimental: {
-    optimizePackageImports: ['react-icons', 'react-hot-toast', 'date-fns'],
+    optimizePackageImports: [
+      'react-icons', 
+      'react-hot-toast', 
+      'date-fns',
+      'lucide-react',
+      '@radix-ui/react-dialog',
+      'tailwind-merge',
+      'query-string'
+    ],
     turbo: {
       rules: {
         '*.svg': {
@@ -18,6 +26,8 @@ const nextConfig = {
         },
       },
     },
+    // optimizeCss: true, // Disabled due to critters dependency issue
+    webVitalsAttribution: ['CLS', 'LCP', 'FCP', 'INP', 'TTFB'],
   },
 
   // Image optimization
@@ -47,10 +57,44 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 31536000, // 1 year
     dangerouslyAllowSVG: false,
+    unoptimized: false,
   },
 
   // Compression and caching
   compress: true,
+  productionBrowserSourceMaps: false,
+  generateEtags: false,
+  
+  // Webpack optimizations
+  webpack: (config, { dev, isServer }) => {
+    // Production optimizations
+    if (!dev && !isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true,
+          },
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: -10,
+            chunks: 'all',
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            priority: -30,
+            reuseExistingChunk: true,
+          },
+        },
+      };
+    }
+    
+    return config;
+  },
   
   // Headers for security and performance
   async headers() {

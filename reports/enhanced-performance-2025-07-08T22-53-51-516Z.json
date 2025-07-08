@@ -1,0 +1,404 @@
+{
+  "timestamp": "2025-07-08T22:53:42.764Z",
+  "metrics": {
+    "memoryUsage": {
+      "rss": 43794432,
+      "heapTotal": 5832704,
+      "heapUsed": 4255016,
+      "external": 1582211,
+      "arrayBuffers": 10515,
+      "heapUsedMB": "4.06"
+    },
+    "apiPerformance": {
+      "totalRequests": 5,
+      "successfulRequests": 0,
+      "failedRequests": 5,
+      "averageResponseTime": -1,
+      "results": [
+        {
+          "endpoint": "/api/trending",
+          "url": "http://localhost:3000/api/trending",
+          "success": false,
+          "responseTime": 14.755457999999999,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0
+        },
+        {
+          "endpoint": "/api/shows",
+          "url": "http://localhost:3000/api/shows",
+          "success": false,
+          "responseTime": 1.681500000000014,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0
+        },
+        {
+          "endpoint": "/api/search/artists?q=test",
+          "url": "http://localhost:3000/api/search/artists?q=test",
+          "success": false,
+          "responseTime": 4.373041999999998,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0
+        },
+        {
+          "endpoint": "/api/featured",
+          "url": "http://localhost:3000/api/featured",
+          "success": false,
+          "responseTime": 3.3799170000000345,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0
+        },
+        {
+          "endpoint": "/api/stats",
+          "url": "http://localhost:3000/api/stats",
+          "success": false,
+          "responseTime": 5.179250000000025,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0
+        }
+      ]
+    },
+    "bundleSize": 1185845,
+    "bundleSizeMB": "1.13"
+  },
+  "thresholds": {
+    "apiResponse": 500,
+    "buildTime": 120000,
+    "bundleSize": 5000000,
+    "lcp": 2500,
+    "fcp": 1800,
+    "cls": 0.1,
+    "memoryUsage": 104857600
+  },
+  "tests": [],
+  "recommendations": [],
+  "performanceData": {
+    "apiEndpoints": [
+      {
+        "endpoint": "/api/trending",
+        "url": "http://localhost:3000/api/trending",
+        "success": false,
+        "responseTime": 14.755457999999999,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/shows",
+        "url": "http://localhost:3000/api/shows",
+        "success": false,
+        "responseTime": 1.681500000000014,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/search/artists?q=test",
+        "url": "http://localhost:3000/api/search/artists?q=test",
+        "success": false,
+        "responseTime": 4.373041999999998,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/featured",
+        "url": "http://localhost:3000/api/featured",
+        "success": false,
+        "responseTime": 3.3799170000000345,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/stats",
+        "url": "http://localhost:3000/api/stats",
+        "success": false,
+        "responseTime": 5.179250000000025,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/search/artists?q=test",
+        "url": "http://localhost:3000/api/search/artists?q=test",
+        "success": false,
+        "responseTime": 3.6651669999999967,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/shows?limit=10",
+        "url": "http://localhost:3000/api/shows?limit=10",
+        "success": false,
+        "responseTime": 3.2524579999999332,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/trending?type=shows&limit=5",
+        "url": "http://localhost:3000/api/trending?type=shows&limit=5",
+        "success": false,
+        "responseTime": 1.249084000000039,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      }
+    ],
+    "webVitals": {},
+    "buildMetrics": {},
+    "bundleAnalysis": {
+      "totalSize": 1185845,
+      "fileCount": 37,
+      "largeFiles": [
+        {
+          "file": "chunks/vendors-2d6de9dab3664630.js",
+          "size": 921878,
+          "sizeKB": "900.27"
+        }
+      ],
+      "chunks": [
+        {
+          "file": "9G33ICc20rMjIZJb-3jmo/_buildManifest.js",
+          "size": 224,
+          "type": "javascript"
+        },
+        {
+          "file": "9G33ICc20rMjIZJb-3jmo/_ssgManifest.js",
+          "size": 77,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/(site)/error-8af4a0c7d50c9f3c.js",
+          "size": 1092,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/(site)/loading-a5c9b8ab7dfcef1a.js",
+          "size": 466,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/(site)/page-797a4eb70a39644d.js",
+          "size": 17737,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/_not-found/page-d9a9836757e83cd5.js",
+          "size": 143,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/account/error-63c55b8bc3675f34.js",
+          "size": 442,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/account/loading-c431265398691288.js",
+          "size": 468,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/account/page-216ec0f8aaf6eb31.js",
+          "size": 3322,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/artists/[slug]/error-82ee575418a19765.js",
+          "size": 1464,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/artists/[slug]/loading-214ebcba71b7496b.js",
+          "size": 143,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/artists/[slug]/page-5bd26a9c6ca56216.js",
+          "size": 6088,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/layout-6281794f9180284e.js",
+          "size": 10458,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/not-found-4529de587a9949a7.js",
+          "size": 204,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/search/error-bfdad6535743256b.js",
+          "size": 1088,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/search/loading-ebf2dcb3989baa52.js",
+          "size": 468,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/search/page-72f6e8f4671bfba6.js",
+          "size": 2299,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/shows/[id]/error-287ff4f806fa0a19.js",
+          "size": 1461,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/shows/[id]/loading-7a34d03aaea5c79b.js",
+          "size": 143,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/shows/[id]/page-b85777af168c64e4.js",
+          "size": 17427,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/shows/error-b05b17ae43f83344.js",
+          "size": 1447,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/shows/loading-7e362ac9d9519584.js",
+          "size": 143,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/shows/page-de7a5452d0bce3d9.js",
+          "size": 286,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/trending/error-3b58eaf2c3cb324b.js",
+          "size": 1265,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/trending/loading-e5d6e2a8ab49d685.js",
+          "size": 143,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/app/trending/page-aa9f0a747bc117ed.js",
+          "size": 7465,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/common-98d3d6c4043c2df5.js",
+          "size": 14405,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/main-7c4af4d9ba1c6ff2.js",
+          "size": 152,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/main-app-91b633e0e71e649c.js",
+          "size": 457,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/pages/_app-0c0d221b8f8237fa.js",
+          "size": 280,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/pages/_error-e5b4d61ed02fe2b7.js",
+          "size": 247,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/polyfills-42372ed130431b0a.js",
+          "size": 112594,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/vendors-2d6de9dab3664630.js",
+          "size": 921878,
+          "type": "javascript"
+        },
+        {
+          "file": "chunks/webpack-4f4f205a42012841.js",
+          "size": 3583,
+          "type": "javascript"
+        },
+        {
+          "file": "css/2978360968872b7a.css",
+          "size": 25874,
+          "type": "css"
+        }
+      ]
+    },
+    "memoryProfile": {
+      "rss": 43794432,
+      "heapTotal": 5832704,
+      "heapUsed": 4255016,
+      "external": 1582211,
+      "arrayBuffers": 10515,
+      "heapUsedMB": "4.06"
+    },
+    "databasePerformance": {
+      "tests": [
+        {
+          "endpoint": "/api/search/artists?q=test",
+          "url": "http://localhost:3000/api/search/artists?q=test",
+          "success": false,
+          "responseTime": 3.6651669999999967,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0,
+          "testName": "Artist Search"
+        },
+        {
+          "endpoint": "/api/shows?limit=10",
+          "url": "http://localhost:3000/api/shows?limit=10",
+          "success": false,
+          "responseTime": 3.2524579999999332,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0,
+          "testName": "Show Listing"
+        },
+        {
+          "endpoint": "/api/trending?type=shows&limit=5",
+          "url": "http://localhost:3000/api/trending?type=shows&limit=5",
+          "success": false,
+          "responseTime": 1.249084000000039,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0,
+          "testName": "Trending Data"
+        }
+      ],
+      "averageQueryTime": 2.722236333333323,
+      "slowQueries": []
+    }
+  },
+  "summary": {
+    "overallScore": 50,
+    "categories": {
+      "apiPerformance": {
+        "score": 0,
+        "status": "NEEDS_IMPROVEMENT"
+      },
+      "bundleSize": {
+        "score": 100,
+        "status": "EXCELLENT"
+      }
+    },
+    "criticalIssues": 0,
+    "recommendations": 0
+  }
+}

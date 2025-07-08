@@ -1,0 +1,211 @@
+{
+  "timestamp": "2025-07-08T23:01:45.954Z",
+  "metrics": {
+    "memoryUsage": {
+      "rss": 44335104,
+      "heapTotal": 6094848,
+      "heapUsed": 4255016,
+      "external": 1582211,
+      "arrayBuffers": 10515,
+      "heapUsedMB": "4.06"
+    },
+    "apiPerformance": {
+      "totalRequests": 5,
+      "successfulRequests": 0,
+      "failedRequests": 5,
+      "averageResponseTime": -1,
+      "results": [
+        {
+          "endpoint": "/api/trending",
+          "url": "http://localhost:3000/api/trending",
+          "success": false,
+          "responseTime": 17.221083,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0
+        },
+        {
+          "endpoint": "/api/shows",
+          "url": "http://localhost:3000/api/shows",
+          "success": false,
+          "responseTime": 0.959417000000002,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0
+        },
+        {
+          "endpoint": "/api/search/artists?q=test",
+          "url": "http://localhost:3000/api/search/artists?q=test",
+          "success": false,
+          "responseTime": 3.462874999999997,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0
+        },
+        {
+          "endpoint": "/api/featured",
+          "url": "http://localhost:3000/api/featured",
+          "success": false,
+          "responseTime": 1.901916999999969,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0
+        },
+        {
+          "endpoint": "/api/stats",
+          "url": "http://localhost:3000/api/stats",
+          "success": false,
+          "responseTime": 3.7458330000000046,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0
+        }
+      ]
+    }
+  },
+  "thresholds": {
+    "apiResponse": 500,
+    "buildTime": 120000,
+    "bundleSize": 5000000,
+    "lcp": 2500,
+    "fcp": 1800,
+    "cls": 0.1,
+    "memoryUsage": 104857600
+  },
+  "tests": [],
+  "recommendations": [],
+  "performanceData": {
+    "apiEndpoints": [
+      {
+        "endpoint": "/api/trending",
+        "url": "http://localhost:3000/api/trending",
+        "success": false,
+        "responseTime": 17.221083,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/shows",
+        "url": "http://localhost:3000/api/shows",
+        "success": false,
+        "responseTime": 0.959417000000002,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/search/artists?q=test",
+        "url": "http://localhost:3000/api/search/artists?q=test",
+        "success": false,
+        "responseTime": 3.462874999999997,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/featured",
+        "url": "http://localhost:3000/api/featured",
+        "success": false,
+        "responseTime": 1.901916999999969,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/stats",
+        "url": "http://localhost:3000/api/stats",
+        "success": false,
+        "responseTime": 3.7458330000000046,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/search/artists?q=test",
+        "url": "http://localhost:3000/api/search/artists?q=test",
+        "success": false,
+        "responseTime": 3.7102499999999736,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/shows?limit=10",
+        "url": "http://localhost:3000/api/shows?limit=10",
+        "success": false,
+        "responseTime": 1.6286249999999427,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      },
+      {
+        "endpoint": "/api/trending?type=shows&limit=5",
+        "url": "http://localhost:3000/api/trending?type=shows&limit=5",
+        "success": false,
+        "responseTime": 1.4034580000000005,
+        "status": 0,
+        "error": "fetch failed",
+        "size": 0
+      }
+    ],
+    "webVitals": {},
+    "buildMetrics": {},
+    "bundleAnalysis": {},
+    "memoryProfile": {
+      "rss": 44335104,
+      "heapTotal": 6094848,
+      "heapUsed": 4255016,
+      "external": 1582211,
+      "arrayBuffers": 10515,
+      "heapUsedMB": "4.06"
+    },
+    "databasePerformance": {
+      "tests": [
+        {
+          "endpoint": "/api/search/artists?q=test",
+          "url": "http://localhost:3000/api/search/artists?q=test",
+          "success": false,
+          "responseTime": 3.7102499999999736,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0,
+          "testName": "Artist Search"
+        },
+        {
+          "endpoint": "/api/shows?limit=10",
+          "url": "http://localhost:3000/api/shows?limit=10",
+          "success": false,
+          "responseTime": 1.6286249999999427,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0,
+          "testName": "Show Listing"
+        },
+        {
+          "endpoint": "/api/trending?type=shows&limit=5",
+          "url": "http://localhost:3000/api/trending?type=shows&limit=5",
+          "success": false,
+          "responseTime": 1.4034580000000005,
+          "status": 0,
+          "error": "fetch failed",
+          "size": 0,
+          "testName": "Trending Data"
+        }
+      ],
+      "averageQueryTime": 2.2474443333333056,
+      "slowQueries": []
+    }
+  },
+  "summary": {
+    "overallScore": 0,
+    "categories": {
+      "apiPerformance": {
+        "score": 0,
+        "status": "NEEDS_IMPROVEMENT"
+      }
+    },
+    "criticalIssues": 0,
+    "recommendations": 0
+  }
+}

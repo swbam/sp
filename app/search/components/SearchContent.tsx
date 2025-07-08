@@ -1,96 +1,94 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { ArtistCard } from '@/components/ArtistCard';
-import type { Artist } from '@/types';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import type { TicketmasterArtist } from '@/libs/ticketmaster';
+import MediaItem from '@/components/MediaItem';
 
 interface SearchContentProps {
-  searchQuery?: string;
+  searchParams: {
+    q?: string;
+  };
 }
 
-export const SearchContent: React.FC<SearchContentProps> = ({ searchQuery }) => {
-  const [artists, setArtists] = useState<Artist[]>([]);
+const SearchContent: React.FC<SearchContentProps> = ({
+  searchParams
+}) => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
+  const [artists, setArtists] = useState<TicketmasterArtist[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!searchQuery || searchQuery.length < 2) {
-      setArtists([]);
-      setHasSearched(false);
-      return;
-    }
-
     const searchArtists = async () => {
+      if (!searchParams.q) return;
+
       setIsLoading(true);
-      setHasSearched(true);
-      
+      setError(null);
+
       try {
-        // Use real API call
-        const response = await fetch(`/api/search/artists?q=${encodeURIComponent(searchQuery)}`);
-        const data = await response.json();
-        
+        const response = await fetch(`/api/search/artists?q=${encodeURIComponent(searchParams.q)}`);
         if (!response.ok) {
-          throw new Error(data.error || 'Search failed');
+          throw new Error('Failed to search artists');
         }
-        
-        setArtists(data.artists || []);
-        setIsLoading(false);
-        
-      } catch (error) {
-        console.error('Search failed:', error);
-        setArtists([]);
+
+        const data = await response.json();
+        setArtists(data);
+      } catch (err) {
+        console.error('Search error:', err);
+        setError('Failed to load search results');
+      } finally {
         setIsLoading(false);
       }
     };
 
     searchArtists();
-  }, [searchQuery]);
+  }, [searchParams.q]);
 
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-y-2 w-full px-6">
-        <div className="text-neutral-400 text-center py-8">
-          Searching for artists...
-        </div>
+      <div className="flex items-center justify-center h-full">
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
 
-  if (!hasSearched) {
+  if (error) {
     return (
-      <div className="flex flex-col gap-y-2 w-full px-6">
-        <div className="text-neutral-400 text-center py-8">
-          <div className="text-lg mb-2">🎵</div>
-          <p>Search for your favorite artists to see their upcoming shows</p>
-        </div>
+      <div className="flex flex-col gap-y-2 w-full px-6 text-neutral-400">
+        {error}
       </div>
     );
   }
 
   if (artists.length === 0) {
     return (
-      <div className="flex flex-col gap-y-2 w-full px-6">
-        <div className="text-neutral-400 text-center py-8">
-          <p>No artists found for &ldquo;{searchQuery}&rdquo;</p>
-          <p className="text-sm mt-2">Try a different search term</p>
-        </div>
+      <div className="flex flex-col gap-y-2 w-full px-6 text-neutral-400">
+        No artists found.
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-y-6 w-full px-6 pb-6">
-      <div>
-        <h2 className="text-white text-xl font-semibold mb-4">
-          Artists ({artists.length})
-        </h2>
-        
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          {artists.map((artist) => (
-            <ArtistCard key={artist.id} artist={artist} />
-          ))}
+    <div className="flex flex-col gap-y-2 w-full px-6">
+      {artists.map((artist) => (
+        <div
+          key={artist.id}
+          className="flex items-center gap-x-4 w-full cursor-pointer hover:bg-neutral-800/50 rounded-md p-2"
+          onClick={() => router.push(`/artists/${artist.id}`)}
+        >
+          <MediaItem
+            data={{
+              id: artist.id,
+              title: artist.name,
+              author: artist.genres.join(', ') || 'Music',
+              image_path: artist.images[0]?.url || '/images/music-placeholder.png'
+            }}
+          />
         </div>
-      </div>
+      ))}
     </div>
   );
 };
+
+export default SearchContent;

@@ -5,6 +5,9 @@ import { ShowCard } from '@/components/ShowCard';
 import type { ShowWithDetails } from '@/types';
 import Image from 'next/image';
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default async function ShowsPage() {
   const supabase = createServerComponentClient({ cookies });
 

@@ -7,7 +7,7 @@ interface UseRealtimeVotingProps {
 
 interface UseRealtimeVotingReturn {
   votingStates: Record<string, boolean>;
-  vote: (songId: string, voteType: 'up') => Promise<void>;
+  vote: (songId: string, voteType: 'up' | 'down') => Promise<void>;
 }
 
 export const useRealtimeVoting = ({ 
@@ -27,6 +27,7 @@ export const useRealtimeVoting = ({
         },
         body: JSON.stringify({
           setlist_song_id: songId,
+          vote_type: voteType,
         }),
       });
 

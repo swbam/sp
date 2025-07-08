@@ -1,9 +1,19 @@
 import { HeroSearch } from '@/components/HeroSearch';
 import { ConditionalContent } from './components/ConditionalContent';
 
-export const revalidate = 0;
+export const revalidate = 300; // 5 minutes
 
 export default async function Home() {
+  // Pre-fetch trending data for better performance
+  const [trendingShows, trendingArtists] = await Promise.all([
+    fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/trending?type=shows&limit=8&timeframe=week`, {
+      next: { revalidate: 300 }
+    }).then(res => res.json()).catch(() => ({ trending_shows: [] })),
+    fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/trending?type=artists&limit=12&timeframe=week`, {
+      next: { revalidate: 300 }
+    }).then(res => res.json()).catch(() => ({ trending_artists: [] }))
+  ]);
+
   return (
     <div className="bg-neutral-900 rounded-lg h-full w-full overflow-hidden overflow-y-auto">
       {/* Hero Section with Centered Search */}
@@ -24,7 +34,10 @@ export default async function Home() {
 
       {/* Main Content */}
       <div className="px-6 pb-8 -mt-8 relative z-20">
-        <ConditionalContent />
+        <ConditionalContent 
+          initialTrendingShows={trendingShows.trending_shows || []}
+          initialTrendingArtists={trendingArtists.trending_artists || []}
+        />
       </div>
     </div>
   );

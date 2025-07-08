@@ -4,66 +4,45 @@ import { useState, useEffect } from 'react';
 import { ShowCard } from '@/components/ShowCard';
 import { ArtistCard } from '@/components/ArtistCard';
 import { Slider } from '@/components/Slider';
+import { useRealtimeTrending } from '@/hooks/useRealtimeTrending';
 import type { ShowWithDetails, Artist } from '@/types';
 
 interface TrendingSectionProps {
   className?: string;
+  initialTrendingShows?: ShowWithDetails[];
+  initialTrendingArtists?: Artist[];
 }
 
-export const TrendingSection: React.FC<TrendingSectionProps> = ({ className = '' }) => {
-  const [trendingShows, setTrendingShows] = useState<ShowWithDetails[]>([]);
-  const [trendingArtists, setTrendingArtists] = useState<Artist[]>([]);
-  const [isLoadingShows, setIsLoadingShows] = useState(true);
-  const [isLoadingArtists, setIsLoadingArtists] = useState(true);
+export const TrendingSection: React.FC<TrendingSectionProps> = ({ 
+  className = '',
+  initialTrendingShows = [],
+  initialTrendingArtists = []
+}) => {
+  const { data, isLoading, error, lastUpdated } = useRealtimeTrending(
+    {
+      trending_shows: initialTrendingShows,
+      trending_artists: initialTrendingArtists,
+      lastUpdated: new Date()
+    },
+    {
+      timeframe: 'week',
+      showsLimit: 10,
+      artistsLimit: 12,
+      updateInterval: 60000 // 1 minute
+    }
+  );
 
+  const [showLastUpdated, setShowLastUpdated] = useState(false);
+
+  // Show last updated indicator briefly when data changes
   useEffect(() => {
-    const loadTrendingShows = async () => {
-      try {
-        const response = await fetch('/api/trending?type=shows&limit=10&timeframe=week');
-        const data = await response.json();
-        
-        if (response.ok) {
-          setTrendingShows(data.trending_shows || []);
-        } else {
-          // Fallback to regular shows
-          const fallbackResponse = await fetch('/api/shows?limit=10&status=upcoming');
-          const fallbackData = await fallbackResponse.json();
-          if (fallbackResponse.ok) {
-            setTrendingShows(fallbackData.shows || []);
-          }
-        }
-      } catch (error) {
-        console.error('Failed to load trending shows:', error);
-      } finally {
-        setIsLoadingShows(false);
-      }
-    };
-
-    const loadTrendingArtists = async () => {
-      try {
-        const response = await fetch('/api/trending?type=artists&limit=12&timeframe=week');
-        const data = await response.json();
-        
-        if (response.ok) {
-          setTrendingArtists(data.trending_artists || []);
-        } else {
-          // Fallback to regular artists
-          const fallbackResponse = await fetch('/api/artists?limit=12&sort=followers');
-          const fallbackData = await fallbackResponse.json();
-          if (fallbackResponse.ok) {
-            setTrendingArtists(fallbackData.artists || []);
-          }
-        }
-      } catch (error) {
-        console.error('Failed to load trending artists:', error);
-      } finally {
-        setIsLoadingArtists(false);
-      }
-    };
-
-    loadTrendingShows();
-    loadTrendingArtists();
-  }, []);
+    if (lastUpdated) {
+      setShowLastUpdated(true);
+      const timer = setTimeout(() => setShowLastUpdated(false), 3000);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [lastUpdated]);
 
   const LoadingSkeleton = ({ count = 5, type = 'show' }: { count?: number; type?: 'show' | 'artist' }) => (
     <div className="flex gap-4">
@@ -87,29 +66,41 @@ export const TrendingSection: React.FC<TrendingSectionProps> = ({ className = ''
 
   return (
     <div className={`space-y-12 ${className}`}>
+      {/* Real-time update indicator */}
+      {showLastUpdated && (
+        <div className="flex items-center justify-center">
+          <div className="bg-emerald-600/20 border border-emerald-500/30 rounded-full px-4 py-2 flex items-center gap-2 text-emerald-400 text-sm">
+            <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+            Updated {lastUpdated.toLocaleTimeString()}
+          </div>
+        </div>
+      )}
+
       {/* Trending Shows */}
       <section>
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-white text-2xl font-semibold">
             🔥 Trending Shows This Week
           </h2>
-          <a
-            href="/shows"
-            className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors"
-          >
-            View All Shows →
-          </a>
+          <div className="flex items-center gap-4">
+            <a
+              href="/trending"
+              className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors"
+            >
+              View All Trending →
+            </a>
+          </div>
         </div>
         
-        {isLoadingShows ? (
+        {isLoading ? (
           <LoadingSkeleton count={3} type="show" />
-        ) : trendingShows.length > 0 ? (
+        ) : data.trending_shows.length > 0 ? (
           <Slider
             itemsPerView={{ default: 1, md: 2, lg: 3 }}
             showArrows={true}
             className="w-full"
           >
-            {trendingShows.map((show) => (
+            {data.trending_shows.map((show: ShowWithDetails) => (
               <ShowCard key={show.id} show={show} />
             ))}
           </Slider>
@@ -138,15 +129,15 @@ export const TrendingSection: React.FC<TrendingSectionProps> = ({ className = ''
           </a>
         </div>
         
-        {isLoadingArtists ? (
+        {isLoading ? (
           <LoadingSkeleton count={6} type="artist" />
-        ) : trendingArtists.length > 0 ? (
+        ) : data.trending_artists.length > 0 ? (
           <Slider
             itemsPerView={{ default: 2, sm: 3, md: 4, lg: 5, xl: 6 }}
             showArrows={true}
             className="w-full"
           >
-            {trendingArtists.map((artist) => (
+            {data.trending_artists.map((artist: Artist) => (
               <ArtistCard key={artist.id} artist={artist} />
             ))}
           </Slider>
@@ -165,7 +156,7 @@ export const TrendingSection: React.FC<TrendingSectionProps> = ({ className = ''
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-gradient-to-br from-emerald-600/20 to-emerald-700/20 p-6 rounded-lg border border-emerald-500/20">
           <div className="text-2xl font-bold text-emerald-400 mb-2">
-            {trendingShows.length}
+            {data.trending_shows.length}
           </div>
           <div className="text-neutral-300 text-sm">
             Trending Shows This Week
@@ -174,7 +165,7 @@ export const TrendingSection: React.FC<TrendingSectionProps> = ({ className = ''
         
         <div className="bg-gradient-to-br from-blue-600/20 to-blue-700/20 p-6 rounded-lg border border-blue-500/20">
           <div className="text-2xl font-bold text-blue-400 mb-2">
-            {trendingArtists.length}
+            {data.trending_artists.length}
           </div>
           <div className="text-neutral-300 text-sm">
             Popular Artists
@@ -190,6 +181,16 @@ export const TrendingSection: React.FC<TrendingSectionProps> = ({ className = ''
           </div>
         </div>
       </section>
+
+      {/* Error indicator */}
+      {error && (
+        <div className="bg-red-600/20 border border-red-500/30 rounded-lg p-4 text-red-400 text-sm">
+          <div className="flex items-center gap-2">
+            <span>⚠️</span>
+            <span>Error loading trending data: {error}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

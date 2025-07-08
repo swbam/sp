@@ -18,6 +18,11 @@
     "incremental": true,
     "verbatimModuleSyntax": true,
     "preserveConstEnums": true,
+    "declaration": false,
+    "declarationMap": false,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
     "plugins": [
       {
         "name": "next"
@@ -34,7 +39,9 @@
     },
     "baseUrl": ".",
     "removeComments": true,
-    "sourceMap": false
+    "sourceMap": false,
+    "composite": false,
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo"
   },
   "include": [
     "next-env.d.ts", 

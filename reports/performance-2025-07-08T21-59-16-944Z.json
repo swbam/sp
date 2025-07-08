@@ -1,0 +1,73 @@
+{
+  "timestamp": "2025-07-08T21:59:16.944Z",
+  "metrics": {
+    "buildTime": 4289,
+    "bundleSize": 1184446,
+    "coreWebVitals": {},
+    "apiPerformance": {
+      "/api/trending": {
+        "duration": -1,
+        "status": 0,
+        "success": false,
+        "error": "fetch failed"
+      },
+      "/api/shows": {
+        "duration": -1,
+        "status": 0,
+        "success": false,
+        "error": "fetch failed"
+      },
+      "/api/search/artists?q=test": {
+        "duration": -1,
+        "status": 0,
+        "success": false,
+        "error": "fetch failed"
+      },
+      "/api/featured": {
+        "duration": -1,
+        "status": 0,
+        "success": false,
+        "error": "fetch failed"
+      },
+      "/api/stats": {
+        "duration": -1,
+        "status": 0,
+        "success": false,
+        "error": "fetch failed"
+      }
+    },
+    "memoryUsage": {
+      "rss": 44744704,
+      "heapTotal": 5832704,
+      "heapUsed": 5161192,
+      "external": 1542231,
+      "arrayBuffers": 10515
+    }
+  },
+  "thresholds": {
+    "buildTime": 120000,
+    "bundleSize": 5000000,
+    "lcp": 2500,
+    "fcp": 1800,
+    "cls": 0.1,
+    "apiResponse": 1000
+  },
+  "summary": {
+    "buildTime": {
+      "value": 4289,
+      "status": "PASS"
+    },
+    "bundleSize": {
+      "value": "1.13MB",
+      "status": "PASS"
+    },
+    "apiPerformance": {
+      "averageResponseTime": null,
+      "failedRequests": 5
+    },
+    "memoryUsage": {
+      "value": "5MB",
+      "status": "PASS"
+    }
+  }
+}

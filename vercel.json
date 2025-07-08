@@ -31,6 +31,10 @@
     {
       "path": "/api/sync/finalized",
       "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/sync/autonomous",
+      "schedule": "30 */6 * * *"
     }
   ],
   "headers": [

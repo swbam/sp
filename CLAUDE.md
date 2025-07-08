@@ -4,6 +4,21 @@
 
 You are working with the **mrwebwork/spotify** template (Next.js 13.4+, Supabase, TypeScript, Tailwind). This is a fully functional Spotify clone that we will transform into MySetlist \- a concert setlist voting platform. 
 
+NEXT_PUBLIC_SUPABASE_URL=https://eotvxxipggnqxonvzkks.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvdHZ4eGlwZ2ducXhvbnZ6a2tzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE5MzY0NjYsImV4cCI6MjA2NzUxMjQ2Nn0.jOetqdvld75LwNpzlxGXiHvMaGaO1FIeebkcObwYKhc
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVvdHZ4eGlwZ2ducXhvbnZ6a2tzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTkzNjQ2NiwiZXhwIjoyMDY3NTEyNDY2fQ.UcCqgn45-JiykTwgTNsRScPJm8Q74K57TL5_3lO0IAI
+SPOTIFY_CLIENT_ID=2946864dc822469b9c672292ead45f43
+SPOTIFY_CLIENT_SECRET=feaf0fc901124b839b11e02f97d18a8d
+TICKETMASTER_API_KEY=k8GrSAkbFaN0w7qDxGl7ohr8LwdAQm9b
+SETLISTFM_API_KEY=xkutflW-aRy_Df9rF4OkJyCsHBYN88V37EBL
+JWT_SECRET=7uXJjiJ3F5rZAu7LJ2I7KwbS5wMtiBtzuy/dqkcMaKnKnp+XHdp8vZDqkEhvBOit8m/93PuY44YMNvq+Fu0bRg==
+CRON_SECRET=6155002300
+NEXT_PUBLIC_APP_URL=https://localhost:3000
+NEXT_PUBLIC_APP_ENV=production
+
+
+
+
 ---
 
 ## **🚨 CRITICAL RULES \- READ FIRST**

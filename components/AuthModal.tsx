@@ -1,24 +1,20 @@
 'use client';
 
 import { useEffect } from 'react';
-
-import { useSessionContext, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
-
-import { Modal } from './Modal';
+import { useSessionContext, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/navigation';
 
-import { useAuthModal } from '@/hooks/useAuthModal';
+import { useAuthModal } from "@/hooks/useAuthModal";
+import { Modal } from './Modal';
 
-export const AuthModal = () => {
-  //* Initializes Supabase client, Next.js router and session context.
-  const supabaseClient = useSupabaseClient();
-  const router = useRouter();
+const AuthModal = () => {
   const { session } = useSessionContext();
+  const router = useRouter();
   const { onClose, isOpen } = useAuthModal();
+  const supabaseClient = useSupabaseClient();
 
-  //* Effect hook for handling session changes.
   useEffect(() => {
     if (session) {
       router.refresh();
@@ -26,23 +22,21 @@ export const AuthModal = () => {
     }
   }, [session, router, onClose]);
 
-  //* Handler for modal open state changes.
   const onChange = (open: boolean) => {
     if (!open) {
       onClose();
     }
-  };
+  }
 
   return (
     <Modal
       title="Welcome back"
-      description="Login into your account"
+      description="Login to your account"
       isOpen={isOpen}
       onChange={onChange}
     >
       <Auth
         theme="dark"
-        magicLink
         providers={['spotify']}
         supabaseClient={supabaseClient}
         appearance={{
@@ -51,12 +45,18 @@ export const AuthModal = () => {
             default: {
               colors: {
                 brand: '#1DB954',
-                brandAccent: '#1ed760',
-              },
-            },
-          },
+                brandAccent: '#1ed760'
+              }
+            }
+          }
         }}
+        providerScopes={{
+          spotify: 'user-read-email user-follow-read user-top-read'
+        }}
+        redirectTo={`${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`}
       />
     </Modal>
   );
-};
+}
+
+export default AuthModal;
