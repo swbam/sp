@@ -1,0 +1,1185 @@
+{
+  "timestamp": "2025-07-09T02:28:07.886Z",
+  "testSuite": "Comprehensive Performance Test",
+  "pageLoadTimes": {
+    "Homepage": {
+      "url": "/",
+      "avgTime": 767.859583,
+      "minTime": 53.04191600000013,
+      "maxTime": 1890.446291,
+      "attempts": 3,
+      "status": "PASS"
+    },
+    "Search Page": {
+      "url": "/search",
+      "avgTime": 122.50741666666666,
+      "minTime": 39.70824999999968,
+      "maxTime": 282.74850000000015,
+      "attempts": 3,
+      "status": "PASS"
+    },
+    "Shows Page": {
+      "url": "/shows",
+      "avgTime": 482.1898473333334,
+      "minTime": 262.64204199999995,
+      "maxTime": 819.4851250000002,
+      "attempts": 3,
+      "status": "PASS"
+    },
+    "Trending Page": {
+      "url": "/trending",
+      "avgTime": 200.5306529999995,
+      "minTime": 51.209374999999454,
+      "maxTime": 277.5911669999996,
+      "attempts": 3,
+      "status": "PASS"
+    },
+    "Artist Page": {
+      "url": "/artists/taylor-swift",
+      "avgTime": 494.14037499999995,
+      "minTime": 349.9715420000002,
+      "maxTime": 691.2862500000001,
+      "attempts": 3,
+      "status": "PASS"
+    },
+    "Show Detail": {
+      "url": "/shows/1",
+      "avgTime": 272.79770866666695,
+      "minTime": 142.68645900000047,
+      "maxTime": 529.1660000000002,
+      "attempts": 3,
+      "status": "PASS"
+    }
+  },
+  "apiResponseTimes": {
+    "Trending": {
+      "url": "/api/trending",
+      "avgTime": 22.810000199999923,
+      "minTime": 21.414999999999964,
+      "maxTime": 24.908042000000023,
+      "attempts": 5,
+      "status": "PASS"
+    },
+    "Shows": {
+      "url": "/api/shows",
+      "avgTime": 177.60749159999995,
+      "minTime": 122.38212500000009,
+      "maxTime": 216.33033299999988,
+      "attempts": 5,
+      "status": "PASS"
+    },
+    "Search Artists": {
+      "url": "/api/search/artists?q=taylor",
+      "avgTime": 662.8214418000003,
+      "minTime": 337.0690830000003,
+      "maxTime": 1751.3815830000003,
+      "attempts": 5,
+      "status": "FAIL"
+    },
+    "Featured Artists": {
+      "url": "/api/featured",
+      "avgTime": null,
+      "minTime": null,
+      "maxTime": null,
+      "attempts": 5,
+      "status": "FAIL"
+    },
+    "Artist Detail": {
+      "url": "/api/artists/taylor-swift",
+      "avgTime": 195.42463300000017,
+      "minTime": 127.08016599999974,
+      "maxTime": 376.1180829999994,
+      "attempts": 5,
+      "status": "PASS"
+    },
+    "Show Detail": {
+      "url": "/api/shows/1",
+      "avgTime": 188.86759160000003,
+      "minTime": 128.00595799999974,
+      "maxTime": 394.6514589999988,
+      "attempts": 5,
+      "status": "PASS"
+    },
+    "Vote Endpoint": {
+      "url": "/api/votes",
+      "avgTime": 29.930083599999854,
+      "minTime": 22.55158300000039,
+      "maxTime": 58.40849999999955,
+      "attempts": 5,
+      "status": "PASS"
+    }
+  },
+  "databaseQueryTimes": {
+    "Artists Count": {
+      "endpoint": "/api/stats",
+      "avgTime": 1233.313361333334,
+      "minTime": 1085.6925420000007,
+      "maxTime": 1429.4836670000004,
+      "status": "FAIL"
+    },
+    "Shows Query": {
+      "endpoint": "/api/shows?limit=10",
+      "avgTime": 138.89761100000032,
+      "minTime": 130.87262499999997,
+      "maxTime": 146.6065000000017,
+      "status": "FAIL"
+    },
+    "Search Performance": {
+      "endpoint": "/api/search/artists?q=taylor",
+      "avgTime": 987.5456529999987,
+      "minTime": 496.9903750000012,
+      "maxTime": 1938.2577919999967,
+      "status": "FAIL"
+    },
+    "Artist with Shows": {
+      "endpoint": "/api/artists/taylor-swift/shows",
+      "avgTime": 278.74658333333355,
+      "minTime": 225.30608399999983,
+      "maxTime": 375.4660409999997,
+      "status": "FAIL"
+    },
+    "Trending Algorithm": {
+      "endpoint": "/api/trending",
+      "avgTime": 22.99790266666605,
+      "minTime": 22.169958999998926,
+      "maxTime": 24.476957999999286,
+      "status": "PASS"
+    }
+  },
+  "concurrentLoadResults": {
+    "1_users": {
+      "userCount": 1,
+      "totalTime": 21.120958000003156,
+      "successful": 1,
+      "failed": 0,
+      "avgResponseTime": 21.116792000000714,
+      "throughput": 47.3463372257949,
+      "status": "PASS"
+    },
+    "5_users": {
+      "userCount": 5,
+      "totalTime": 505.8179580000033,
+      "successful": 5,
+      "failed": 0,
+      "avgResponseTime": 203.17284180000206,
+      "throughput": 9.884979212224742,
+      "status": "PASS"
+    },
+    "10_users": {
+      "userCount": 10,
+      "totalTime": 10613.390791000002,
+      "successful": 10,
+      "failed": 0,
+      "avgResponseTime": 2306.413787299999,
+      "throughput": 0.9422059544325694,
+      "status": "PASS"
+    },
+    "20_users": {
+      "userCount": 20,
+      "totalTime": 8376.650792,
+      "successful": 20,
+      "failed": 0,
+      "avgResponseTime": 1268.434710799999,
+      "throughput": 2.3875890850196018,
+      "status": "PASS"
+    }
+  },
+  "memoryUsage": {
+    "before": {
+      "rss": 75169792,
+      "heapTotal": 12582912,
+      "heapUsed": 10117552,
+      "external": 4055401,
+      "arrayBuffers": 536695
+    },
+    "after": {
+      "rss": 77692928,
+      "heapTotal": 15204352,
+      "heapUsed": 11573904,
+      "external": 4644005,
+      "arrayBuffers": 1125259
+    },
+    "increase": {
+      "rss": 2.40625,
+      "heapUsed": 1.388885498046875,
+      "heapTotal": 2.5
+    },
+    "status": "PASS"
+  },
+  "bundleAnalysis": {
+    "totalSizeMB": 40.26565933227539,
+    "fileCount": 183,
+    "largeFileCount": 36,
+    "avgFileSize": 225.3116675204918,
+    "fileSizes": [
+      {
+        "file": "[next]_entry_page-loader_ts_5fd5fe._.js",
+        "size": 60.1025390625,
+        "isLarge": false
+      },
+      {
+        "file": "[next]_entry_page-loader_ts_5fd5fe._.js.map",
+        "size": 92.7646484375,
+        "isLarge": false
+      },
+      {
+        "file": "[next]_entry_page-loader_ts_9c7adb._.js",
+        "size": 60.1044921875,
+        "isLarge": false
+      },
+      {
+        "file": "[next]_entry_page-loader_ts_9c7adb._.js.map",
+        "size": 92.7646484375,
+        "isLarge": false
+      },
+      {
+        "file": "[next]_entry_page-loader_ts_dd197c._.js",
+        "size": 0.7138671875,
+        "isLarge": false
+      },
+      {
+        "file": "[next]_entry_page-loader_ts_e8f2dd._.js",
+        "size": 0.7138671875,
+        "isLarge": false
+      },
+      {
+        "file": "[next]_internal_font_google_figtree_4e33210f_module_b52d8e.css",
+        "size": 1.3525390625,
+        "isLarge": false
+      },
+      {
+        "file": "[next]_internal_font_google_figtree_4e33210f_module_b52d8e.css.map",
+        "size": 1.8603515625,
+        "isLarge": false
+      },
+      {
+        "file": "[root of the server]__025fe2._.js",
+        "size": 974.4404296875,
+        "isLarge": true
+      },
+      {
+        "file": "[root of the server]__025fe2._.js.map",
+        "size": 587.5390625,
+        "isLarge": true
+      },
+      {
+        "file": "[root of the server]__2bc16f._.js",
+        "size": 955.4404296875,
+        "isLarge": true
+      },
+      {
+        "file": "[root of the server]__2bc16f._.js.map",
+        "size": 578.7666015625,
+        "isLarge": true
+      },
+      {
+        "file": "[root of the server]__3350ef._.css",
+        "size": 32.314453125,
+        "isLarge": false
+      },
+      {
+        "file": "[root of the server]__3350ef._.css.map",
+        "size": 44.5771484375,
+        "isLarge": false
+      },
+      {
+        "file": "[turbopack]_dev_client_38d6c6._.js",
+        "size": 19.25,
+        "isLarge": false
+      },
+      {
+        "file": "[turbopack]_dev_client_38d6c6._.js.map",
+        "size": 28.9736328125,
+        "isLarge": false
+      },
+      {
+        "file": "[turbopack]_dev_client_dcbd7d._.js",
+        "size": 19.2890625,
+        "isLarge": false
+      },
+      {
+        "file": "[turbopack]_dev_client_dcbd7d._.js.map",
+        "size": 28.9736328125,
+        "isLarge": false
+      },
+      {
+        "file": "[turbopack]_dev_client_hmr-client_ts_4da20b._.js",
+        "size": 0.9931640625,
+        "isLarge": false
+      },
+      {
+        "file": "[turbopack]_dev_client_hmr-client_ts_4da20b._.js.map",
+        "size": 0.0517578125,
+        "isLarge": false
+      },
+      {
+        "file": "[turbopack]_dev_client_hmr-client_ts_ddc16d._.js",
+        "size": 0.390625,
+        "isLarge": false
+      },
+      {
+        "file": "_1c53b9._.js",
+        "size": 31.2548828125,
+        "isLarge": false
+      },
+      {
+        "file": "_1c53b9._.js.map",
+        "size": 8.759765625,
+        "isLarge": false
+      },
+      {
+        "file": "_4c5016._.js",
+        "size": 153.1904296875,
+        "isLarge": false
+      },
+      {
+        "file": "_4c5016._.js.map",
+        "size": 91.1875,
+        "isLarge": false
+      },
+      {
+        "file": "_526ae1._.js",
+        "size": 31.1875,
+        "isLarge": false
+      },
+      {
+        "file": "_526ae1._.js.map",
+        "size": 8.7509765625,
+        "isLarge": false
+      },
+      {
+        "file": "_5a1bd7._.js",
+        "size": 71.7919921875,
+        "isLarge": false
+      },
+      {
+        "file": "_5a1bd7._.js.map",
+        "size": 25.3515625,
+        "isLarge": false
+      },
+      {
+        "file": "_5ad2d9._.js",
+        "size": 86.84765625,
+        "isLarge": false
+      },
+      {
+        "file": "_5ad2d9._.js.map",
+        "size": 36.3720703125,
+        "isLarge": false
+      },
+      {
+        "file": "_64a0e5._.js",
+        "size": 21.9736328125,
+        "isLarge": false
+      },
+      {
+        "file": "_64a0e5._.js.map",
+        "size": 6.2236328125,
+        "isLarge": false
+      },
+      {
+        "file": "_9b4806._.js",
+        "size": 155.4013671875,
+        "isLarge": false
+      },
+      {
+        "file": "_9b4806._.js.map",
+        "size": 69.5888671875,
+        "isLarge": false
+      },
+      {
+        "file": "_a72fbb._.js",
+        "size": 141.681640625,
+        "isLarge": false
+      },
+      {
+        "file": "_a72fbb._.js.map",
+        "size": 54.1279296875,
+        "isLarge": false
+      },
+      {
+        "file": "_c9b73a._.js",
+        "size": 21.96484375,
+        "isLarge": false
+      },
+      {
+        "file": "_c9b73a._.js.map",
+        "size": 6.2236328125,
+        "isLarge": false
+      },
+      {
+        "file": "_e3f930._.js",
+        "size": 21.9697265625,
+        "isLarge": false
+      },
+      {
+        "file": "_e3f930._.js.map",
+        "size": 6.2236328125,
+        "isLarge": false
+      },
+      {
+        "file": "_e478e2._.js",
+        "size": 46.7744140625,
+        "isLarge": false
+      },
+      {
+        "file": "_e478e2._.js.map",
+        "size": 19.4072265625,
+        "isLarge": false
+      },
+      {
+        "file": "_f2641b._.js",
+        "size": 34.5576171875,
+        "isLarge": false
+      },
+      {
+        "file": "_f2641b._.js.map",
+        "size": 11.6396484375,
+        "isLarge": false
+      },
+      {
+        "file": "_f5a43c._.js",
+        "size": 31.1142578125,
+        "isLarge": false
+      },
+      {
+        "file": "_f5a43c._.js.map",
+        "size": 8.7373046875,
+        "isLarge": false
+      },
+      {
+        "file": "app",
+        "size": 0.34375,
+        "isLarge": false
+      },
+      {
+        "file": "app_(site)_error_tsx_4b6313._.js",
+        "size": 0.357421875,
+        "isLarge": false
+      },
+      {
+        "file": "app_(site)_error_tsx_f864fb._.js",
+        "size": 9.6455078125,
+        "isLarge": false
+      },
+      {
+        "file": "app_(site)_error_tsx_f864fb._.js.map",
+        "size": 2.6357421875,
+        "isLarge": false
+      },
+      {
+        "file": "app_(site)_loading_tsx_38ad7c._.js",
+        "size": 3.4765625,
+        "isLarge": false
+      },
+      {
+        "file": "app_(site)_loading_tsx_38ad7c._.js.map",
+        "size": 0.9111328125,
+        "isLarge": false
+      },
+      {
+        "file": "app_(site)_loading_tsx_8618f1._.js",
+        "size": 0.408203125,
+        "isLarge": false
+      },
+      {
+        "file": "app_(site)_page_tsx_f19723._.js",
+        "size": 0.380859375,
+        "isLarge": false
+      },
+      {
+        "file": "app_artists_[slug]_error_tsx_57b9b0._.js",
+        "size": 0.4208984375,
+        "isLarge": false
+      },
+      {
+        "file": "app_artists_[slug]_loading_tsx_5f7caa._.js",
+        "size": 0.4248046875,
+        "isLarge": false
+      },
+      {
+        "file": "app_artists_[slug]_page_tsx_bef637._.js",
+        "size": 0.396484375,
+        "isLarge": false
+      },
+      {
+        "file": "app_globals_b52d8e.css",
+        "size": 31.0283203125,
+        "isLarge": false
+      },
+      {
+        "file": "app_globals_b52d8e.css.map",
+        "size": 42.7666015625,
+        "isLarge": false
+      },
+      {
+        "file": "app_layout_tsx_1fd359._.js",
+        "size": 1.1650390625,
+        "isLarge": false
+      },
+      {
+        "file": "app_not-found_tsx_703f02._.js",
+        "size": 0.625,
+        "isLarge": false
+      },
+      {
+        "file": "app_not-found_tsx_703f02._.js.map",
+        "size": 0.0517578125,
+        "isLarge": false
+      },
+      {
+        "file": "app_not-found_tsx_7191c1._.js",
+        "size": 0.3486328125,
+        "isLarge": false
+      },
+      {
+        "file": "app_search_error_tsx_1b0ad8._.js",
+        "size": 9.6298828125,
+        "isLarge": false
+      },
+      {
+        "file": "app_search_error_tsx_1b0ad8._.js.map",
+        "size": 2.6337890625,
+        "isLarge": false
+      },
+      {
+        "file": "app_search_error_tsx_5e163b._.js",
+        "size": 0.357421875,
+        "isLarge": false
+      },
+      {
+        "file": "app_search_loading_tsx_04f389._.js",
+        "size": 3.47265625,
+        "isLarge": false
+      },
+      {
+        "file": "app_search_loading_tsx_04f389._.js.map",
+        "size": 0.9111328125,
+        "isLarge": false
+      },
+      {
+        "file": "app_search_loading_tsx_614308._.js",
+        "size": 0.408203125,
+        "isLarge": false
+      },
+      {
+        "file": "app_search_page_tsx_e224aa._.js",
+        "size": 0.380859375,
+        "isLarge": false
+      },
+      {
+        "file": "app_shows_[id]_error_tsx_c8abf4._.js",
+        "size": 0.4130859375,
+        "isLarge": false
+      },
+      {
+        "file": "app_shows_[id]_loading_tsx_e9d7ca._.js",
+        "size": 0.4169921875,
+        "isLarge": false
+      },
+      {
+        "file": "app_shows_[id]_page_tsx_db4421._.js",
+        "size": 0.4111328125,
+        "isLarge": false
+      },
+      {
+        "file": "app_shows_error_tsx_8a34f6._.js",
+        "size": 0.4033203125,
+        "isLarge": false
+      },
+      {
+        "file": "app_shows_loading_tsx_6c270e._.js",
+        "size": 0.4072265625,
+        "isLarge": false
+      },
+      {
+        "file": "app_shows_page_tsx_93619b._.js",
+        "size": 0.37890625,
+        "isLarge": false
+      },
+      {
+        "file": "app_trending_error_tsx_014fd0._.js",
+        "size": 7.251953125,
+        "isLarge": false
+      },
+      {
+        "file": "app_trending_error_tsx_014fd0._.js.map",
+        "size": 2.1181640625,
+        "isLarge": false
+      },
+      {
+        "file": "app_trending_error_tsx_375ef5._.js",
+        "size": 0.36328125,
+        "isLarge": false
+      },
+      {
+        "file": "app_trending_page_tsx_058dfd._.js",
+        "size": 0.3935546875,
+        "isLarge": false
+      },
+      {
+        "file": "common-98d3d6c4043c2df5.js",
+        "size": 14.0673828125,
+        "isLarge": false
+      },
+      {
+        "file": "main-7c4af4d9ba1c6ff2.js",
+        "size": 0.1484375,
+        "isLarge": false
+      },
+      {
+        "file": "main-app-91b633e0e71e649c.js",
+        "size": 0.4462890625,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_67af4b._.js",
+        "size": 751.9755859375,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_67af4b._.js.map",
+        "size": 830.689453125,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_69e050._.js",
+        "size": 27.31640625,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_69e050._.js.map",
+        "size": 30.4111328125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_9d8af7._.js",
+        "size": 406.96484375,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_9d8af7._.js.map",
+        "size": 402.3740234375,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_@supabase_gotrue-js_dist_module_ca4a54._.js",
+        "size": 163.51953125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_@supabase_gotrue-js_dist_module_ca4a54._.js.map",
+        "size": 177.4453125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_@swc_helpers_cjs_00636a._.js",
+        "size": 5.4833984375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_@swc_helpers_cjs_00636a._.js.map",
+        "size": 5.333984375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_a01a9e._.js",
+        "size": 661.435546875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_a01a9e._.js.map",
+        "size": 616.1376953125,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_a33c9b._.js",
+        "size": 435.19140625,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_a33c9b._.js.map",
+        "size": 389.6083984375,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_cross-fetch_dist_browser-ponyfill_aa07ba.js",
+        "size": 0.427734375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_cross-fetch_dist_browser-ponyfill_fab045.js",
+        "size": 1.0751953125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_cross-fetch_dist_browser-ponyfill_fab045.js.map",
+        "size": 0.0517578125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_cross-fetch_dist_browser-ponyfill_fba404.js",
+        "size": 20.37109375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_cross-fetch_dist_browser-ponyfill_fba404.js.map",
+        "size": 27.43359375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_date-fns_4928c4._.js",
+        "size": 118.033203125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_date-fns_4928c4._.js.map",
+        "size": 143.0029296875,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_e49d9d._.js",
+        "size": 569.3544921875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_e49d9d._.js.map",
+        "size": 503.171875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_next_6b12bc._.js",
+        "size": 350.796875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_next_6b12bc._.js.map",
+        "size": 238.0556640625,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_091837._.js",
+        "size": 55.53125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_091837._.js.map",
+        "size": 29.1279296875,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_a89fa9._.js",
+        "size": 21.52734375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_a89fa9._.js.map",
+        "size": 9.7041015625,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_client_8bb71d._.js",
+        "size": 695.6953125,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_next_dist_client_8bb71d._.js.map",
+        "size": 316.3154296875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_next_dist_compiled_e13b54._.js",
+        "size": 219.8974609375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_compiled_e13b54._.js.map",
+        "size": 231.3603515625,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_compiled_react-dom_87a050._.js",
+        "size": 4.029296875,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_compiled_react-dom_87a050._.js.map",
+        "size": 3.373046875,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_compiled_react-dom_cjs_react-dom_development_c9a189.js",
+        "size": 1692.263671875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_next_dist_compiled_react-dom_cjs_react-dom_development_c9a189.js.map",
+        "size": 1888.29296875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_next_dist_compiled_react_a1d82d._.js",
+        "size": 179.9521484375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_compiled_react_a1d82d._.js.map",
+        "size": 200.3154296875,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_097721.js",
+        "size": 0.908203125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_1aa222.js",
+        "size": 60.173828125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_1aa222.js.map",
+        "size": 92.7646484375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_2d80bf.js",
+        "size": 0.908203125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_61780e.js",
+        "size": 0.908203125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_67b6cb.js",
+        "size": 60.173828125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_67b6cb.js.map",
+        "size": 92.7646484375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_6854e1.js",
+        "size": 0.908203125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_ca4e8f.js",
+        "size": 60.173828125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_ca4e8f.js.map",
+        "size": 92.7646484375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_cac437.js",
+        "size": 0.908203125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_cca372.js",
+        "size": 60.173828125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_cca372.js.map",
+        "size": 92.7646484375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_e58744.js",
+        "size": 60.173828125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_e58744.js.map",
+        "size": 92.7646484375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_ed831c.js",
+        "size": 60.173828125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_ed831c.js.map",
+        "size": 92.7646484375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_edf214.js",
+        "size": 0.908203125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_fa255a.js",
+        "size": 0.908203125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_fad67d.js",
+        "size": 60.173828125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_esm_build_templates_app-page_fad67d.js.map",
+        "size": 92.7646484375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_pages_071187._.js",
+        "size": 1.87890625,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_pages_071187._.js.map",
+        "size": 0.0517578125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_pages_2cb721._.js",
+        "size": 1.8896484375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_pages_2cb721._.js.map",
+        "size": 0.0517578125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_pages__app_7c0f5a.js",
+        "size": 2.5546875,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_pages__app_7c0f5a.js.map",
+        "size": 0.9599609375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_pages__app_fa4725.js",
+        "size": 0.3896484375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_pages__error_654f68.js",
+        "size": 0.3955078125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_pages__error_a01818.js",
+        "size": 0.384765625,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_pages__error_c75afa.js",
+        "size": 5.9970703125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_next_dist_pages__error_c75afa.js.map",
+        "size": 2.44921875,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_react-dom_cjs_react-dom_development_ab7e07.js",
+        "size": 1287.9619140625,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-dom_cjs_react-dom_development_ab7e07.js.map",
+        "size": 1458.3671875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-dom_f14d04._.js",
+        "size": 3.880859375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_react-dom_f14d04._.js.map",
+        "size": 3.333984375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_react-icons_ai_index_esm_865e76.js",
+        "size": 958.2763671875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_ai_index_esm_865e76.js.map",
+        "size": 817.9501953125,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_bi_index_esm_60bc04.js",
+        "size": 717.3076171875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_bi_index_esm_60bc04.js.map",
+        "size": 572.341796875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_fa_index_esm_cf819b.js",
+        "size": 1888.3173828125,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_fa_index_esm_cf819b.js.map",
+        "size": 1649.1181640625,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_hi_index_esm_f90da2.js",
+        "size": 400.6064453125,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_hi_index_esm_f90da2.js.map",
+        "size": 321.5693359375,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_io_index_esm_163553.js",
+        "size": 731.94921875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_io_index_esm_163553.js.map",
+        "size": 616.232421875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_lib_esm_440277._.js",
+        "size": 6.5576171875,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_react-icons_lib_esm_440277._.js.map",
+        "size": 5.45703125,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_react-icons_rx_index_esm_6415c5.js",
+        "size": 543.619140625,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_rx_index_esm_6415c5.js.map",
+        "size": 473.0966796875,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_tb_index_esm_20b40f.js",
+        "size": 4891.5087890625,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react-icons_tb_index_esm_20b40f.js.map",
+        "size": 3814.0283203125,
+        "isLarge": true
+      },
+      {
+        "file": "node_modules_react_b2385d._.js",
+        "size": 165.4365234375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_react_b2385d._.js.map",
+        "size": 186.560546875,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_tailwind-merge_dist_lib_585415._.js",
+        "size": 135.443359375,
+        "isLarge": false
+      },
+      {
+        "file": "node_modules_tailwind-merge_dist_lib_585415._.js.map",
+        "size": 128.1435546875,
+        "isLarge": false
+      },
+      {
+        "file": "pages",
+        "size": 0.1875,
+        "isLarge": false
+      },
+      {
+        "file": "polyfills-42372ed130431b0a.js",
+        "size": 109.955078125,
+        "isLarge": false
+      },
+      {
+        "file": "vendors-2d6de9dab3664630.js",
+        "size": 900.271484375,
+        "isLarge": true
+      },
+      {
+        "file": "webpack-4f4f205a42012841.js",
+        "size": 3.4990234375,
+        "isLarge": false
+      }
+    ],
+    "status": "FAIL"
+  },
+  "coreWebVitals": {},
+  "recommendations": [
+    {
+      "category": "API Performance",
+      "severity": "MEDIUM",
+      "issue": "Search Artists API responds slowly (662.82ms)",
+      "suggestion": "Add database indexing, implement caching, or optimize queries"
+    },
+    {
+      "category": "API Performance",
+      "severity": "MEDIUM",
+      "issue": "Featured Artists API responds slowly (Infinityms)",
+      "suggestion": "Add database indexing, implement caching, or optimize queries"
+    },
+    {
+      "category": "Database",
+      "severity": "HIGH",
+      "issue": "Artists Count query is slow (1233.31ms)",
+      "suggestion": "Add database indexes, optimize query structure, or implement query caching"
+    },
+    {
+      "category": "Database",
+      "severity": "HIGH",
+      "issue": "Shows Query query is slow (138.90ms)",
+      "suggestion": "Add database indexes, optimize query structure, or implement query caching"
+    },
+    {
+      "category": "Database",
+      "severity": "HIGH",
+      "issue": "Search Performance query is slow (987.55ms)",
+      "suggestion": "Add database indexes, optimize query structure, or implement query caching"
+    },
+    {
+      "category": "Database",
+      "severity": "HIGH",
+      "issue": "Artist with Shows query is slow (278.75ms)",
+      "suggestion": "Add database indexes, optimize query structure, or implement query caching"
+    },
+    {
+      "category": "Bundle Size",
+      "severity": "MEDIUM",
+      "issue": "Large bundle size (40.27MB)",
+      "suggestion": "Implement code splitting, tree shaking, and lazy loading"
+    }
+  ],
+  "summary": {
+    "totalTests": 24,
+    "passedTests": 17,
+    "failedTests": 7,
+    "passPercentage": 70.83333333333334,
+    "overallStatus": "FAIL"
+  }
+}

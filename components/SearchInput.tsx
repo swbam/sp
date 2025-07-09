@@ -25,7 +25,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 
   useEffect(() => {
     const query = {
-      title: debouncedValue,
+      q: debouncedValue,
     };
 
     const url = qs.stringifyUrl({

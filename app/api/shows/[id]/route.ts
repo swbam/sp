@@ -2,11 +2,22 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
+// UUID validation helper
+function isValidUUID(uuid: string): boolean {
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(uuid);
+}
+
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
+    // Validate UUID format
+    if (!isValidUUID(params.id)) {
+      return NextResponse.json({ error: 'Invalid show ID format' }, { status: 400 });
+    }
+
     const supabase = createRouteHandlerClient({ cookies });
 
     // Get show with full details including setlists
@@ -89,7 +100,18 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const updateData = await request.json();
+    // Validate UUID format
+    if (!isValidUUID(params.id)) {
+      return NextResponse.json({ error: 'Invalid show ID format' }, { status: 400 });
+    }
+
+    let updateData;
+    try {
+      updateData = await request.json();
+    } catch (error) {
+      return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+    }
+
     const supabase = createRouteHandlerClient({ cookies });
 
     // Get current user - only authenticated users can update shows

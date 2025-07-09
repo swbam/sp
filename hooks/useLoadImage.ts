@@ -1,9 +1,14 @@
-import type { Artist } from '@/types';
-
-export const useLoadImage = (artist: Artist | null) => {
-  if (!artist || !artist.image_url) {
+export const useLoadImage = (data: any) => {
+  if (!data) {
     return '/images/music-placeholder.png';
   }
 
-  return artist.image_url;
+  // Handle different data structures
+  const imageUrl = data.image_url || data.image_path || data.images?.[0]?.url;
+  
+  if (!imageUrl || imageUrl.includes('undefined') || imageUrl.includes('null')) {
+    return '/images/music-placeholder.png';
+  }
+
+  return imageUrl;
 };

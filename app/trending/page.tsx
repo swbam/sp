@@ -11,11 +11,12 @@ export default async function TrendingPage() {
   const supabase = createServerComponentClient({ cookies });
 
   // Pre-fetch trending data on server
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   const [trendingShows, trendingArtists] = await Promise.all([
-    fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/trending?type=shows&limit=20&timeframe=week`, {
+    fetch(`${baseUrl}/api/trending?type=shows&limit=20&timeframe=week`, {
       next: { revalidate: 300 }
     }).then(res => res.json()).catch(() => ({ trending_shows: [] })),
-    fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/trending?type=artists&limit=24&timeframe=week`, {
+    fetch(`${baseUrl}/api/trending?type=artists&limit=24&timeframe=week`, {
       next: { revalidate: 300 }
     }).then(res => res.json()).catch(() => ({ trending_artists: [] }))
   ]);

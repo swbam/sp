@@ -1,0 +1,436 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: velero
+  labels:
+    app: velero
+    component: backup
+
+---
+# Velero ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: velero
+  namespace: velero
+  labels:
+    app: velero
+    component: backup
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::ACCOUNT_ID:role/velero-role"
+
+---
+# Velero ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: velero
+  labels:
+    app: velero
+    component: backup
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+- nonResourceURLs: ["*"]
+  verbs: ["*"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: velero
+  labels:
+    app: velero
+    component: backup
+subjects:
+- kind: ServiceAccount
+  name: velero
+  namespace: velero
+roleRef:
+  kind: ClusterRole
+  name: velero
+  apiGroup: rbac.authorization.k8s.io
+
+---
+# Velero Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: velero
+  namespace: velero
+  labels:
+    app: velero
+    component: backup
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: velero
+  template:
+    metadata:
+      labels:
+        app: velero
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8085"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: velero
+      restartPolicy: Always
+      containers:
+      - name: velero
+        image: velero/velero:v1.12.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: metrics
+          containerPort: 8085
+        command:
+        - /velero
+        args:
+        - server
+        - --uploader-type=restic
+        - --default-backup-storage-location=aws
+        - --default-volume-snapshot-locations=aws
+        - --metrics-address=0.0.0.0:8085
+        - --log-level=info
+        env:
+        - name: AWS_SHARED_CREDENTIALS_FILE
+          value: /credentials/cloud
+        - name: AWS_CONFIG_FILE
+          value: /config/cloud
+        - name: VELERO_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: VELERO_SCRATCH_DIR
+          value: /scratch
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 100m
+          limits:
+            memory: 512Mi
+            cpu: 500m
+        volumeMounts:
+        - name: plugins
+          mountPath: /plugins
+        - name: scratch
+          mountPath: /scratch
+        - name: certs
+          mountPath: /etc/ssl/certs
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+      initContainers:
+      - name: velero-plugin-for-aws
+        image: velero/velero-plugin-for-aws:v1.8.0
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /target
+          name: plugins
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+      volumes:
+      - name: plugins
+        emptyDir: {}
+      - name: scratch
+        emptyDir: {}
+      - name: certs
+        secret:
+          secretName: velero-certs
+          optional: true
+
+---
+# BackupStorageLocation for AWS S3
+apiVersion: velero.io/v1
+kind: BackupStorageLocation
+metadata:
+  name: aws
+  namespace: velero
+  labels:
+    app: velero
+    component: backup
+spec:
+  provider: aws
+  objectStorage:
+    bucket: mysetlist-backups
+    prefix: velero-backups
+  config:
+    region: us-east-1
+    s3ForcePathStyle: "false"
+    serverSideEncryption: AES256
+
+---
+# VolumeSnapshotLocation for AWS EBS
+apiVersion: velero.io/v1
+kind: VolumeSnapshotLocation
+metadata:
+  name: aws
+  namespace: velero
+  labels:
+    app: velero
+    component: backup
+spec:
+  provider: aws
+  config:
+    region: us-east-1
+
+---
+# Daily backup schedule for MySetlist
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: mysetlist-daily-backup
+  namespace: velero
+  labels:
+    app: velero
+    component: backup
+    schedule: daily
+spec:
+  schedule: "0 2 * * *" # 2 AM UTC daily
+  template:
+    ttl: 720h # 30 days retention
+    includedNamespaces:
+    - mysetlist-production
+    - mysetlist-staging
+    - mysetlist-monitoring
+    excludedResources:
+    - nodes
+    - events
+    - events.events.k8s.io
+    - backups.velero.io
+    - restores.velero.io
+    - resticrepositories.velero.io
+    snapshotVolumes: true
+    defaultVolumesToRestic: false
+    metadata:
+      labels:
+        backup-type: daily
+        environment: production
+
+---
+# Weekly full backup schedule
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: mysetlist-weekly-backup
+  namespace: velero
+  labels:
+    app: velero
+    component: backup
+    schedule: weekly
+spec:
+  schedule: "0 3 * * 0" # 3 AM UTC every Sunday
+  template:
+    ttl: 2160h # 90 days retention
+    includedNamespaces:
+    - "*"
+    excludedResources:
+    - nodes
+    - events
+    - events.events.k8s.io
+    snapshotVolumes: true
+    defaultVolumesToRestic: true
+    metadata:
+      labels:
+        backup-type: weekly
+        environment: production
+
+---
+# Monitoring service for Velero
+apiVersion: v1
+kind: Service
+metadata:
+  name: velero-metrics
+  namespace: velero
+  labels:
+    app: velero
+    component: backup
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8085"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8085
+    targetPort: 8085
+    protocol: TCP
+    name: metrics
+  selector:
+    app: velero
+
+---
+# ServiceMonitor for Prometheus
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: velero
+  namespace: velero
+  labels:
+    app: velero
+    team: mysetlist
+    component: backup
+spec:
+  selector:
+    matchLabels:
+      app: velero
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+
+---
+# PrometheusRule for backup monitoring
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: velero-backup-alerts
+  namespace: velero
+  labels:
+    app: velero
+    team: mysetlist
+    component: backup
+spec:
+  groups:
+  - name: velero.rules
+    rules:
+    - alert: VeleroBackupPartialFailure
+      expr: velero_backup_partial_failure_total > 0
+      for: 15m
+      labels:
+        severity: warning
+        service: velero
+      annotations:
+        summary: "Velero backup partially failed"
+        description: "Velero backup {{ $labels.schedule }} has been partially failing for more than 15 minutes."
+        
+    - alert: VeleroBackupFailure
+      expr: velero_backup_failure_total > 0
+      for: 5m
+      labels:
+        severity: critical
+        service: velero
+      annotations:
+        summary: "Velero backup failed"
+        description: "Velero backup {{ $labels.schedule }} has failed."
+        
+    - alert: VeleroBackupMissing
+      expr: time() - velero_backup_last_successful_timestamp > 86400 # 24 hours
+      for: 0m
+      labels:
+        severity: critical
+        service: velero
+      annotations:
+        summary: "Velero backup missing"
+        description: "Velero backup has not been successful for more than 24 hours."
+
+---
+# Disaster Recovery Restore Template
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: disaster-recovery-runbook
+  namespace: velero
+  labels:
+    app: velero
+    component: backup
+data:
+  disaster-recovery.md: |
+    # MySetlist Disaster Recovery Runbook
+    
+    ## Complete Cluster Restore
+    
+    ### Prerequisites
+    1. New EKS cluster is provisioned
+    2. Velero is installed in the new cluster
+    3. Access to backup storage location
+    
+    ### Steps
+    
+    #### 1. List available backups
+    ```bash
+    velero backup get
+    ```
+    
+    #### 2. Restore from latest backup
+    ```bash
+    velero restore create --from-backup mysetlist-daily-backup-YYYYMMDD-HHMMSS
+    ```
+    
+    #### 3. Monitor restore progress
+    ```bash
+    velero restore describe <restore-name>
+    velero restore logs <restore-name>
+    ```
+    
+    #### 4. Verify application health
+    ```bash
+    kubectl get pods -n mysetlist-production
+    kubectl get services -n mysetlist-production
+    kubectl get ingress -n mysetlist-production
+    ```
+    
+    #### 5. Update DNS if needed
+    ```bash
+    # Update Route53 records to point to new load balancer
+    aws route53 change-resource-record-sets --hosted-zone-id Z123456789 --change-batch file://dns-update.json
+    ```
+    
+    ## Namespace-specific Restore
+    
+    ### Restore only MySetlist production
+    ```bash
+    velero restore create mysetlist-prod-restore \
+      --from-backup mysetlist-daily-backup-YYYYMMDD-HHMMSS \
+      --include-namespaces mysetlist-production
+    ```
+    
+    ### Restore only monitoring stack
+    ```bash
+    velero restore create monitoring-restore \
+      --from-backup mysetlist-weekly-backup-YYYYMMDD-HHMMSS \
+      --include-namespaces mysetlist-monitoring
+    ```
+    
+    ## Database Recovery
+    
+    ### Supabase Database
+    - MySetlist uses Supabase (external)
+    - Database backups are handled by Supabase
+    - Point-in-time recovery available through Supabase dashboard
+    
+    ### Application State Recovery
+    1. Verify database connectivity after restore
+    2. Check Redis cache connectivity (if using)
+    3. Validate external API integrations
+    4. Test user authentication flow
+    
+    ## RTO/RPO Targets
+    
+    - **RTO (Recovery Time Objective)**: 4 hours
+    - **RPO (Recovery Point Objective)**: 24 hours (daily backups)
+    - **Critical RPO**: 1 hour (for production data using external database backups)
+    
+    ## Emergency Contacts
+    
+    - DevOps Team: devops@mysetlist.com
+    - On-call Engineer: +1-XXX-XXX-XXXX
+    - Supabase Support: Through dashboard or support@supabase.io
+    
+    ## Testing Schedule
+    
+    - Quarterly disaster recovery tests
+    - Monthly backup validation
+    - Weekly backup health checks

@@ -312,6 +312,7 @@ export interface Database {
           billing_address: Json | null;
           full_name: string | null;
           payment_method: Json | null;
+          created_at: string;
         };
         Insert: {
           id: string;
@@ -319,6 +320,7 @@ export interface Database {
           billing_address?: Json | null;
           full_name?: string | null;
           payment_method?: Json | null;
+          created_at?: string;
         };
         Update: {
           id?: string;
@@ -326,6 +328,7 @@ export interface Database {
           billing_address?: Json | null;
           full_name?: string | null;
           payment_method?: Json | null;
+          created_at?: string;
         };
         Relationships: [
           {
@@ -335,6 +338,111 @@ export interface Database {
             referencedColumns: ['id'];
           }
         ];
+      };
+      analytics_events: {
+        Row: {
+          id: string;
+          type: string;
+          user_id: string | null;
+          entity_id: string;
+          entity_type: string;
+          metadata: Json | null;
+          timestamp: string;
+          session_id: string | null;
+          user_agent: string | null;
+          ip_address: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          type: string;
+          user_id?: string | null;
+          entity_id: string;
+          entity_type: string;
+          metadata?: Json | null;
+          timestamp: string;
+          session_id?: string | null;
+          user_agent?: string | null;
+          ip_address?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          type?: string;
+          user_id?: string | null;
+          entity_id?: string;
+          entity_type?: string;
+          metadata?: Json | null;
+          timestamp?: string;
+          session_id?: string | null;
+          user_agent?: string | null;
+          ip_address?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      user_activity_log: {
+        Row: {
+          id: string;
+          user_id: string | null;
+          action: string;
+          entity_id: string;
+          entity_type: string;
+          metadata: Json | null;
+          timestamp: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string | null;
+          action: string;
+          entity_id: string;
+          entity_type: string;
+          metadata?: Json | null;
+          timestamp: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string | null;
+          action?: string;
+          entity_id?: string;
+          entity_type?: string;
+          metadata?: Json | null;
+          timestamp?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      realtime_vote_metrics: {
+        Row: {
+          id: string;
+          setlist_song_id: string;
+          user_id: string | null;
+          last_vote_time: string;
+          vote_count: number;
+          net_votes: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          setlist_song_id: string;
+          user_id?: string | null;
+          last_vote_time: string;
+          vote_count?: number;
+          net_votes?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          setlist_song_id?: string;
+          user_id?: string | null;
+          last_vote_time?: string;
+          vote_count?: number;
+          net_votes?: number;
+          created_at?: string;
+        };
+        Relationships: [];
       };
     };
     Views: {

@@ -31,11 +31,32 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
   const [searchResults, setSearchResults] = useState<Song[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isAddingSong, setIsAddingSong] = useState(false);
+  const [userVotes, setUserVotes] = useState<Record<string, 'up' | 'down'>>({});
 
   // Sort songs by upvotes
   const sortedSongs = [...songs].sort((a, b) => {
     return b.upvotes - a.upvotes;
   });
+
+  // Load user votes when songs change
+  useEffect(() => {
+    const loadUserVotes = async () => {
+      if (songs.length === 0) return;
+      
+      const songIds = songs.map(song => song.id);
+      try {
+        const response = await fetch(`/api/votes?setlist_song_ids=${songIds.join(',')}`);
+        if (response.ok) {
+          const data = await response.json();
+          setUserVotes(data.userVotes || {});
+        }
+      } catch (error) {
+        console.error('Error loading user votes:', error);
+      }
+    };
+
+    loadUserVotes();
+  }, [songs]);
 
   // Load complete artist catalog when adding mode is enabled
   useEffect(() => {
@@ -77,8 +98,48 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
   }, [isAddingMode, searchQuery, artistName, artistSlug]);
 
   const handleVote = async (songId: string, voteType: 'up' | 'down') => {
-    // Use the real-time voting hook for both up and down votes
-    await vote(songId, voteType);
+    try {
+      const response = await fetch('/api/votes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          setlist_song_id: songId,
+          vote_type: voteType,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to vote');
+      }
+
+      const data = await response.json();
+      
+      if (data.success) {
+        // Update user vote state
+        setUserVotes(prev => ({
+          ...prev,
+          [songId]: data.userVote
+        }));
+        
+        // Update the song's vote counts locally for immediate feedback
+        const { songs: currentSongs } = { songs };
+        const updatedSongs = currentSongs.map(song => 
+          song.id === songId 
+            ? { ...song, upvotes: data.upvotes, downvotes: data.downvotes }
+            : song
+        );
+        
+        toast.success(data.userVote ? 'Voted successfully!' : 'Vote removed!');
+      } else {
+        throw new Error('Vote was not successful');
+      }
+    } catch (error: any) {
+      console.error('Voting error:', error);
+      toast.error(error.message || 'Failed to vote. Please try again.');
+    }
   };
 
   const handleAddSong = async (song: Song) => {
@@ -157,31 +218,34 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
                 </Button>
               </div>
 
-              {/* Search Results */}
+              {/* Song Dropdown */}
               {isSearching && (
-                <div className="text-neutral-400 text-sm">Searching...</div>
+                <div className="text-neutral-400 text-sm">Loading songs...</div>
               )}
 
               {searchResults.length > 0 && (
-                <div className="space-y-2 max-h-64 overflow-y-auto">
-                  {searchResults.map((song) => (
-                    <div
-                      key={song.id}
-                      className="flex items-center justify-between p-3 bg-neutral-700 rounded hover:bg-neutral-600 transition"
-                    >
-                      <div>
-                        <p className="text-white font-medium">{song.title}</p>
-                        <p className="text-neutral-400 text-sm">{song.artist_name}</p>
-                      </div>
-                      <Button
-                        onClick={() => handleAddSong(song)}
-                        disabled={isAddingSong}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-sm"
-                      >
-                        {isAddingSong ? 'Adding...' : 'Add'}
-                      </Button>
-                    </div>
-                  ))}
+                <div className="space-y-3">
+                  <select
+                    className="w-full bg-neutral-700 text-white border border-neutral-600 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    onChange={(e) => {
+                      const selectedSong = searchResults.find(song => song.id === e.target.value);
+                      if (selectedSong) {
+                        handleAddSong(selectedSong);
+                        e.target.value = '';
+                      }
+                    }}
+                    disabled={isAddingSong}
+                    defaultValue=""
+                  >
+                    <option value="" disabled>
+                      {isAddingSong ? 'Adding song...' : 'Select a song to add'}
+                    </option>
+                    {searchResults.map((song) => (
+                      <option key={song.id} value={song.id}>
+                        {song.title}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               )}
 
@@ -225,6 +289,8 @@ export const SetlistVoting: React.FC<SetlistVotingProps> = ({
                 downvotes={item.downvotes}
                 onVote={(voteType) => handleVote(item.id, voteType)}
                 disabled={isLocked}
+                userVote={userVotes[item.id] || null}
+                isLoading={votingStates[item.id] || false}
               />
             </div>
           ))}

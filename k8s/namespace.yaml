@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mysetlist-production
+  labels:
+    name: mysetlist-production
+    environment: production
+    project: mysetlist
+    version: "1.0.0"
+  annotations:
+    description: "MySetlist Production Environment"
+    contact: "devops@mysetlist.com"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mysetlist-staging
+  labels:
+    name: mysetlist-staging
+    environment: staging
+    project: mysetlist
+    version: "1.0.0"
+  annotations:
+    description: "MySetlist Staging Environment"
+    contact: "devops@mysetlist.com"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mysetlist-monitoring
+  labels:
+    name: mysetlist-monitoring
+    environment: monitoring
+    project: mysetlist
+    version: "1.0.0"
+  annotations:
+    description: "MySetlist Monitoring Stack"
+    contact: "devops@mysetlist.com"

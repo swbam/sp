@@ -4,6 +4,8 @@
   "framework": "nextjs",
   "installCommand": "npm ci",
   "regions": ["iad1"],
+  "cleanUrls": true,
+  "trailingSlash": false,
   "functions": {
     "app/api/**": {
       "maxDuration": 30
@@ -27,16 +29,6 @@
       "maxDuration": 60
     }
   },
-  "crons": [
-    {
-      "path": "/api/sync/finalized",
-      "schedule": "0 */6 * * *"
-    },
-    {
-      "path": "/api/sync/autonomous",
-      "schedule": "30 */6 * * *"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -77,7 +69,7 @@
         },
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "*"
+          "value": "https://sp-swbam-swbams-projects.vercel.app"
         },
         {
           "key": "Access-Control-Allow-Methods",

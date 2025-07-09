@@ -1,0 +1,256 @@
+{
+  "timestamp": "2025-07-09T02:30:44.897Z",
+  "testSuite": "Real-World Performance Test",
+  "results": {
+    "coreWebVitals": {
+      "Homepage Load": {
+        "url": "/",
+        "avgTime": 7.800108400000001,
+        "minTime": 3.268625,
+        "maxTime": 24.5315,
+        "successRate": 1,
+        "status": "PASS"
+      },
+      "Search Page": {
+        "url": "/search",
+        "avgTime": 2.968091799999999,
+        "minTime": 2.744374999999998,
+        "maxTime": 3.0661249999999995,
+        "successRate": 1,
+        "status": "PASS"
+      },
+      "Artist Search": {
+        "url": "/search?q=taylor",
+        "avgTime": 2.489558200000002,
+        "minTime": 2.306041999999991,
+        "maxTime": 2.6026250000000033,
+        "successRate": 1,
+        "status": "PASS"
+      },
+      "Artist Page": {
+        "url": "/artists/taylor-swift",
+        "avgTime": 2.845033200000003,
+        "minTime": 2.6065830000000005,
+        "maxTime": 3.213458000000003,
+        "successRate": 1,
+        "status": "PASS"
+      },
+      "Shows List": {
+        "url": "/shows",
+        "avgTime": 2.8848167999999985,
+        "minTime": 2.250541999999996,
+        "maxTime": 4.376542000000001,
+        "successRate": 1,
+        "status": "PASS"
+      },
+      "Trending Page": {
+        "url": "/trending",
+        "avgTime": 3.0020999999999987,
+        "minTime": 2.201875000000001,
+        "maxTime": 4.150333000000003,
+        "successRate": 1,
+        "status": "PASS"
+      }
+    },
+    "apiPerformance": {
+      "Trending API": {
+        "Light Load": {
+          "avgResponseTime": 3.0438249999999925,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        },
+        "Medium Load": {
+          "avgResponseTime": 3.721877999999998,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        },
+        "Heavy Load": {
+          "avgResponseTime": 5.007163866666663,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        }
+      },
+      "Shows API": {
+        "Light Load": {
+          "avgResponseTime": 1.9388083999999992,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        },
+        "Medium Load": {
+          "avgResponseTime": 3.3586415999999915,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        },
+        "Heavy Load": {
+          "avgResponseTime": 4.780630599999997,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        }
+      },
+      "Search API": {
+        "Light Load": {
+          "avgResponseTime": 2.036857999999995,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        },
+        "Medium Load": {
+          "avgResponseTime": 3.220358533333331,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        },
+        "Heavy Load": {
+          "avgResponseTime": 4.557833466666668,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        }
+      },
+      "Artist API": {
+        "Light Load": {
+          "avgResponseTime": 2.4344418000000134,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        },
+        "Medium Load": {
+          "avgResponseTime": 4.030469599999999,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        },
+        "Heavy Load": {
+          "avgResponseTime": 5.673486266666664,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        }
+      },
+      "Stats API": {
+        "Light Load": {
+          "avgResponseTime": 2.081691799999999,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        },
+        "Medium Load": {
+          "avgResponseTime": 3.616427599999997,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        },
+        "Heavy Load": {
+          "avgResponseTime": 5.487941600000003,
+          "successRate": 0,
+          "dataValidRate": 0,
+          "status": "FAIL"
+        }
+      }
+    },
+    "databasePerformance": {
+      "Stats Query": {
+        "url": "/api/stats",
+        "avgTime": null,
+        "minTime": null,
+        "maxTime": null,
+        "successRate": 0,
+        "status": "FAIL"
+      },
+      "Search Query": {
+        "url": "/api/search/artists?q=taylor",
+        "avgTime": null,
+        "minTime": null,
+        "maxTime": null,
+        "successRate": 0,
+        "status": "FAIL"
+      },
+      "Artist Query": {
+        "url": "/api/artists/taylor-swift",
+        "avgTime": null,
+        "minTime": null,
+        "maxTime": null,
+        "successRate": 0,
+        "status": "FAIL"
+      },
+      "Shows Query": {
+        "url": "/api/shows?limit=20",
+        "avgTime": null,
+        "minTime": null,
+        "maxTime": null,
+        "successRate": 0,
+        "status": "FAIL"
+      },
+      "Trending Query": {
+        "url": "/api/trending",
+        "avgTime": null,
+        "minTime": null,
+        "maxTime": null,
+        "successRate": 0,
+        "status": "FAIL"
+      }
+    },
+    "realtimePerformance": {
+      "Vote Submission": {
+        "avgTime": null,
+        "minTime": null,
+        "maxTime": null,
+        "successRate": 0,
+        "status": "FAIL"
+      },
+      "Trending Updates": {
+        "avgTime": null,
+        "minTime": null,
+        "maxTime": null,
+        "successRate": 0,
+        "status": "FAIL"
+      },
+      "Search Responsiveness": {
+        "avgTime": null,
+        "minTime": null,
+        "maxTime": null,
+        "successRate": 0,
+        "status": "FAIL"
+      }
+    },
+    "memoryUsage": {
+      "before": {
+        "rss": 112017408,
+        "heapTotal": 29884416,
+        "heapUsed": 12808360,
+        "external": 3600374,
+        "arrayBuffers": 175408
+      },
+      "after": {
+        "rss": 114786304,
+        "heapTotal": 29884416,
+        "heapUsed": 11515672,
+        "external": 3542756,
+        "arrayBuffers": 117750
+      },
+      "increase": {
+        "rss": 2.640625,
+        "heapUsed": -1.2328033447265625,
+        "heapTotal": 0,
+        "external": -0.05494880676269531
+      },
+      "status": "PASS"
+    }
+  },
+  "summary": {
+    "totalTests": 14,
+    "passedTests": 6,
+    "failedTests": 8,
+    "passPercentage": 42.857142857142854,
+    "overallStatus": "FAIL",
+    "recommendations": [
+      "Immediate optimization needed"
+    ]
+  }
+}

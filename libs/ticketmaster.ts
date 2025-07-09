@@ -1,4 +1,4 @@
-const TICKETMASTER_API_KEY = process.env.NEXT_PUBLIC_TICKETMASTER_API_KEY;
+const TICKETMASTER_API_KEY = process.env.TICKETMASTER_API_KEY || process.env.NEXT_PUBLIC_TICKETMASTER_API_KEY;
 const TICKETMASTER_BASE_URL = 'https://app.ticketmaster.com/discovery/v2';
 
 export interface TicketmasterArtist {

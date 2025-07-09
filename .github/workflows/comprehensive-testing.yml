@@ -1,0 +1,575 @@
+name: 🧪 Comprehensive Testing Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of tests to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - unit
+          - integration
+          - e2e
+          - performance
+          - security
+          - mobile
+          - accessibility
+
+env:
+  NODE_VERSION: '18'
+  NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+  SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+  NEXT_PUBLIC_APP_URL: 'http://localhost:3000'
+
+jobs:
+  # Job 1: Setup and Build
+  setup:
+    name: 🏗️ Setup & Build
+    runs-on: ubuntu-latest
+    outputs:
+      test-type: ${{ steps.test-type.outputs.type }}
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 📦 Cache build artifacts
+        uses: actions/cache@v3
+        with:
+          path: |
+            .next
+            node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('package-lock.json') }}-${{ hashFiles('.next/**') }}
+
+      - name: 🎯 Determine test type
+        id: test-type
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "type=${{ github.event.inputs.test_type }}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event_name }}" == "schedule" ]]; then
+            echo "type=all" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "type=all" >> $GITHUB_OUTPUT
+          else
+            echo "type=unit" >> $GITHUB_OUTPUT
+          fi
+
+  # Job 2: Unit Tests
+  unit-tests:
+    name: 🧪 Unit Tests
+    runs-on: ubuntu-latest
+    needs: setup
+    if: contains(fromJSON('["all", "unit"]'), needs.setup.outputs.test-type)
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Restore dependencies
+        run: npm ci
+
+      - name: 🧪 Run unit tests with coverage
+        run: npm run test:coverage
+
+      - name: 📊 Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info
+          flags: unit-tests
+          name: unit-test-coverage
+
+      - name: 📄 Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: unit-test-coverage
+          path: coverage/
+
+  # Job 3: Integration Tests
+  integration-tests:
+    name: 🔗 Integration Tests  
+    runs-on: ubuntu-latest
+    needs: setup
+    if: contains(fromJSON('["all", "integration"]'), needs.setup.outputs.test-type)
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: mysetlist_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Restore dependencies
+        run: npm ci
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm run start &
+          sleep 30
+          curl -f http://localhost:3000 || exit 1
+
+      - name: 🔗 Run integration tests
+        run: npm run test:integration
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/mysetlist_test
+
+      - name: 📄 Upload integration test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: integration-test-results
+          path: test-results/
+
+  # Job 4: E2E Tests
+  e2e-tests:
+    name: 🎭 E2E Tests
+    runs-on: ubuntu-latest
+    needs: setup
+    if: contains(fromJSON('["all", "e2e"]'), needs.setup.outputs.test-type)
+    
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Restore dependencies
+        run: npm ci
+
+      - name: 🎭 Install Playwright
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm run start &
+          sleep 30
+
+      - name: 🎭 Run E2E tests
+        run: npx playwright test --project=${{ matrix.browser }}
+
+      - name: 📄 Upload E2E test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: e2e-results-${{ matrix.browser }}
+          path: |
+            test-results/
+            playwright-report/
+
+  # Job 5: Mobile Tests
+  mobile-tests:
+    name: 📱 Mobile Tests
+    runs-on: ubuntu-latest
+    needs: setup
+    if: contains(fromJSON('["all", "mobile"]'), needs.setup.outputs.test-type)
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Restore dependencies
+        run: npm ci
+
+      - name: 🎭 Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm run start &
+          sleep 30
+
+      - name: 📱 Run mobile tests
+        run: npm run test:mobile
+
+      - name: 📄 Upload mobile test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: mobile-test-results
+          path: |
+            test-results/mobile/
+            playwright-report-mobile/
+
+  # Job 6: Accessibility Tests
+  accessibility-tests:
+    name: ♿ Accessibility Tests
+    runs-on: ubuntu-latest
+    needs: setup
+    if: contains(fromJSON('["all", "accessibility"]'), needs.setup.outputs.test-type)
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Restore dependencies
+        run: npm ci
+
+      - name: 🎭 Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm run start &
+          sleep 30
+
+      - name: ♿ Run accessibility tests
+        run: npm run test:accessibility
+
+      - name: 📄 Upload accessibility test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: accessibility-test-results
+          path: |
+            test-results/a11y/
+            playwright-report-a11y/
+
+  # Job 7: Security Tests
+  security-tests:
+    name: 🔒 Security Tests
+    runs-on: ubuntu-latest
+    needs: setup
+    if: contains(fromJSON('["all", "security"]'), needs.setup.outputs.test-type)
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Restore dependencies
+        run: npm ci
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm run start &
+          sleep 30
+
+      - name: 🔒 Run security tests
+        run: npm run test:security
+
+      - name: 📊 Run npm audit
+        run: npm audit --audit-level=moderate
+
+      - name: 🔍 Run CodeQL analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          languages: javascript
+
+      - name: 📄 Upload security test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: security-test-results
+          path: test-results/security-report.json
+
+  # Job 8: Performance Tests
+  performance-tests:
+    name: ⚡ Performance Tests
+    runs-on: ubuntu-latest
+    needs: setup
+    if: contains(fromJSON('["all", "performance"]'), needs.setup.outputs.test-type)
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm run start &
+          sleep 30
+
+      - name: ⚡ Run performance tests
+        run: npm run test:performance
+
+      - name: 🚀 Install k6
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+
+      - name: 🔥 Run load tests (light)
+        run: k6 run --duration 30s --vus 10 tests/load/load-test.js
+        env:
+          BASE_URL: http://localhost:3000
+
+      - name: 📄 Upload performance test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: performance-test-results
+          path: reports/
+
+  # Job 9: Visual Regression Tests
+  visual-tests:
+    name: 👁️ Visual Tests
+    runs-on: ubuntu-latest
+    needs: setup
+    if: contains(fromJSON('["all"]'), needs.setup.outputs.test-type)
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🔧 Restore dependencies
+        run: npm ci
+
+      - name: 🎭 Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm run start &
+          sleep 30
+
+      - name: 👁️ Run visual regression tests
+        run: npm run test:visual
+
+      - name: 📄 Upload visual test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: visual-test-results
+          path: |
+            test-results/visual/
+            playwright-report-visual/
+
+  # Job 10: Quality Gates
+  quality-gates:
+    name: 🚪 Quality Gates
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests, e2e-tests, security-tests]
+    if: always()
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📊 Download all test results
+        uses: actions/download-artifact@v3
+        with:
+          path: ./test-artifacts
+
+      - name: 🔍 Analyze test results
+        run: |
+          echo "🧪 Unit Tests: ${{ needs.unit-tests.result }}"
+          echo "🔗 Integration Tests: ${{ needs.integration-tests.result }}"
+          echo "🎭 E2E Tests: ${{ needs.e2e-tests.result }}"
+          echo "🔒 Security Tests: ${{ needs.security-tests.result }}"
+
+      - name: ✅ Quality gate check
+        run: |
+          failed_jobs=()
+          
+          if [[ "${{ needs.unit-tests.result }}" == "failure" ]]; then
+            failed_jobs+=("Unit Tests")
+          fi
+          
+          if [[ "${{ needs.integration-tests.result }}" == "failure" ]]; then
+            failed_jobs+=("Integration Tests")
+          fi
+          
+          if [[ "${{ needs.e2e-tests.result }}" == "failure" ]]; then
+            failed_jobs+=("E2E Tests")
+          fi
+          
+          if [[ "${{ needs.security-tests.result }}" == "failure" ]]; then
+            failed_jobs+=("Security Tests")
+          fi
+          
+          if [[ ${#failed_jobs[@]} -gt 0 ]]; then
+            echo "❌ Quality gate failed. Failed jobs: ${failed_jobs[*]}"
+            exit 1
+          else
+            echo "✅ All quality gates passed!"
+          fi
+
+      - name: 📊 Generate test report
+        run: |
+          cat > test-summary.md << EOF
+          # 🧪 Test Summary Report
+          
+          ## Test Results Overview
+          - **Unit Tests**: ${{ needs.unit-tests.result }}
+          - **Integration Tests**: ${{ needs.integration-tests.result }}
+          - **E2E Tests**: ${{ needs.e2e-tests.result }}
+          - **Security Tests**: ${{ needs.security-tests.result }}
+          
+          ## Quality Metrics
+          - **Code Coverage**: Available in artifacts
+          - **Security Scan**: Available in artifacts
+          - **Performance Metrics**: Available in artifacts
+          
+          Generated on: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          EOF
+
+      - name: 📄 Upload test summary
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-summary
+          path: test-summary.md
+
+  # Job 11: Notification
+  notification:
+    name: 📢 Notification
+    runs-on: ubuntu-latest
+    needs: [quality-gates]
+    if: always() && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: 📢 Notify on success
+        if: needs.quality-gates.result == 'success'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              "text": "✅ MySetlist: All tests passed!",
+              "attachments": [{
+                "color": "good",
+                "fields": [{
+                  "title": "Branch",
+                  "value": "${{ github.ref_name }}",
+                  "short": true
+                }, {
+                  "title": "Commit",
+                  "value": "${{ github.sha }}",
+                  "short": true
+                }]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: 📢 Notify on failure
+        if: needs.quality-gates.result == 'failure'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              "text": "❌ MySetlist: Tests failed!",
+              "attachments": [{
+                "color": "danger",
+                "fields": [{
+                  "title": "Branch",
+                  "value": "${{ github.ref_name }}",
+                  "short": true
+                }, {
+                  "title": "Commit",
+                  "value": "${{ github.sha }}",
+                  "short": true
+                }, {
+                  "title": "Workflow",
+                  "value": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                  "short": false
+                }]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

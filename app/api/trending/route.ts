@@ -9,6 +9,10 @@ import {
   getTrendingCategories
 } from '@/libs/trending-algorithms';
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 // Cache configuration
 const CACHE_DURATION = 300; // 5 minutes
 const STALE_WHILE_REVALIDATE = 600; // 10 minutes

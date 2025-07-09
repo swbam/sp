@@ -4,7 +4,11 @@ import { NextResponse } from 'next/server';
 import { spotifyAPI } from '@/libs/spotify-api';
 import { ticketmasterAPI } from '@/libs/ticketmaster-api';
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
+
+
 
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);

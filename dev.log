@@ -9,6 +9,412 @@
     · turbo
 
  ✓ Starting...
- ✓ Compiled in 160ms
- ✓ Ready in 766ms
+ ✓ Compiled in 114ms
+ ✓ Ready in 661ms
+ ✓ Compiled /api/search/artists in 148ms
+ GET /api/search/artists?q=Taylor 200 in 2846ms
+ ✓ Compiled /api/votes in 44ms
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.wwjjgh7e2hn'
+    at async open (node:internal/fs/promises:633:25)
+    at async writeFile (node:internal/fs/promises:1207:14)
+    at async writeFileAtomic (/Users/seth/sp/node_modules/next/dist/lib/fs/write-atomic.js:16:9)
+    at async TurbopackManifestLoader.writeBuildManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:176:9)
+    at async TurbopackManifestLoader.writeManifests (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:318:9)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:401:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.wwjjgh7e2hn'
+}
+ ✓ Compiled /_error in 280ms
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/server/app/api/votes/route/app-paths-manifest.json'
+    at async open (node:internal/fs/promises:633:25)
+    at async readFile (node:internal/fs/promises:1237:14)
+    at async readPartialManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:28:23)
+    at async TurbopackManifestLoader.loadAppPathsManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:108:91)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:395:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/server/app/api/votes/route/app-paths-manifest.json'
+}
+ ✓ Compiled /api/trending in 41ms
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.dqecgwu9y9n'
+    at async open (node:internal/fs/promises:633:25)
+    at async writeFile (node:internal/fs/promises:1207:14)
+    at async writeFileAtomic (/Users/seth/sp/node_modules/next/dist/lib/fs/write-atomic.js:16:9)
+    at async TurbopackManifestLoader.writeBuildManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:176:9)
+    at async TurbopackManifestLoader.writeManifests (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:318:9)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:401:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.dqecgwu9y9n'
+}
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.ldwhcw1lwr'
+    at async open (node:internal/fs/promises:633:25)
+    at async writeFile (node:internal/fs/promises:1207:14)
+    at async writeFileAtomic (/Users/seth/sp/node_modules/next/dist/lib/fs/write-atomic.js:16:9)
+    at async TurbopackManifestLoader.writeBuildManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:176:9)
+    at async TurbopackManifestLoader.writeManifests (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:318:9)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:401:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.ldwhcw1lwr'
+}
+ ✓ Compiled /api/featured in 29ms
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.hobip7f854c'
+    at async open (node:internal/fs/promises:633:25)
+    at async writeFile (node:internal/fs/promises:1207:14)
+    at async writeFileAtomic (/Users/seth/sp/node_modules/next/dist/lib/fs/write-atomic.js:16:9)
+    at async TurbopackManifestLoader.writeBuildManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:176:9)
+    at async TurbopackManifestLoader.writeManifests (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:318:9)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:401:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.hobip7f854c'
+}
+ ✓ Compiled /api/stats in 29ms
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.jhixo1z920g'
+    at async open (node:internal/fs/promises:633:25)
+    at async writeFile (node:internal/fs/promises:1207:14)
+    at async writeFileAtomic (/Users/seth/sp/node_modules/next/dist/lib/fs/write-atomic.js:16:9)
+    at async TurbopackManifestLoader.writeBuildManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:176:9)
+    at async TurbopackManifestLoader.writeManifests (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:318:9)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:401:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.jhixo1z920g'
+}
+ ✓ Compiled /api/shows in 18ms
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.6qxnjcmttbq'
+    at async open (node:internal/fs/promises:633:25)
+    at async writeFile (node:internal/fs/promises:1207:14)
+    at async writeFileAtomic (/Users/seth/sp/node_modules/next/dist/lib/fs/write-atomic.js:16:9)
+    at async TurbopackManifestLoader.writeBuildManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:176:9)
+    at async TurbopackManifestLoader.writeManifests (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:318:9)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:401:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.6qxnjcmttbq'
+}
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/server/app/api/search/artists/route/app-paths-manifest.json'
+    at async open (node:internal/fs/promises:633:25)
+    at async readFile (node:internal/fs/promises:1237:14)
+    at async readPartialManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:28:23)
+    at async TurbopackManifestLoader.loadAppPathsManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:108:91)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:395:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/server/app/api/search/artists/route/app-paths-manifest.json'
+}
+ ✓ Compiled /api/sync/health in 28ms
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.tegl09jg0ah'
+    at async open (node:internal/fs/promises:633:25)
+    at async writeFile (node:internal/fs/promises:1207:14)
+    at async writeFileAtomic (/Users/seth/sp/node_modules/next/dist/lib/fs/write-atomic.js:16:9)
+    at async TurbopackManifestLoader.writeBuildManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:176:9)
+    at async TurbopackManifestLoader.writeManifests (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:318:9)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:401:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/static/development/_buildManifest.js.tmp.tegl09jg0ah'
+}
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/server/app/api/trending/route/app-paths-manifest.json'
+    at async open (node:internal/fs/promises:633:25)
+    at async readFile (node:internal/fs/promises:1237:14)
+    at async readPartialManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:28:23)
+    at async TurbopackManifestLoader.loadAppPathsManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:108:91)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:395:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/server/app/api/trending/route/app-paths-manifest.json'
+}
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/server/app/api/trending/route/app-paths-manifest.json'
+    at async open (node:internal/fs/promises:633:25)
+    at async readFile (node:internal/fs/promises:1237:14)
+    at async readPartialManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:28:23)
+    at async TurbopackManifestLoader.loadAppPathsManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:108:91)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:395:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/server/app/api/trending/route/app-paths-manifest.json'
+}
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/server/app/api/trending/route/app-paths-manifest.json'
+    at async open (node:internal/fs/promises:633:25)
+    at async readFile (node:internal/fs/promises:1237:14)
+    at async readPartialManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:28:23)
+    at async TurbopackManifestLoader.loadAppPathsManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:108:91)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:395:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/server/app/api/trending/route/app-paths-manifest.json'
+}
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/server/app/api/trending/route/app-paths-manifest.json'
+    at async open (node:internal/fs/promises:633:25)
+    at async readFile (node:internal/fs/promises:1237:14)
+    at async readPartialManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:28:23)
+    at async TurbopackManifestLoader.loadAppPathsManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:108:91)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:395:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/server/app/api/trending/route/app-paths-manifest.json'
+}
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/server/app/api/search/artists/route/app-paths-manifest.json'
+    at async open (node:internal/fs/promises:633:25)
+    at async readFile (node:internal/fs/promises:1237:14)
+    at async readPartialManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:28:23)
+    at async TurbopackManifestLoader.loadAppPathsManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:108:91)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:395:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/server/app/api/search/artists/route/app-paths-manifest.json'
+}
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/seth/sp/.next/server/app/api/search/artists/route/app-paths-manifest.json'
+    at async open (node:internal/fs/promises:633:25)
+    at async readFile (node:internal/fs/promises:1237:14)
+    at async readPartialManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:28:23)
+    at async TurbopackManifestLoader.loadAppPathsManifest (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack/manifest-loader.js:108:91)
+    at async handleRouteType (/Users/seth/sp/node_modules/next/dist/server/dev/turbopack-utils.js:395:17)
+    at async Object.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:651:17)
+    at async DevBundlerService.ensurePage (/Users/seth/sp/node_modules/next/dist/server/lib/dev-bundler-service.js:18:20)
+    at async DevServer.ensurePage (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:551:9)
+    at async Object.ensure (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:169:17)
+    at async DevRouteMatcherManager.matchAll (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/dev-route-matcher-manager.js:96:13)
+    at async DevRouteMatcherManager.match (/Users/seth/sp/node_modules/next/dist/server/future/route-matcher-managers/default-route-matcher-manager.js:155:26)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/seth/sp/node_modules/next/dist/server/next-server.js:228:31)
+    at async DevServer.handleRequestImpl (/Users/seth/sp/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/seth/sp/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/seth/sp/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/seth/sp/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/seth/sp/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/seth/sp/.next/server/app/api/search/artists/route/app-paths-manifest.json'
+}
 [?25h

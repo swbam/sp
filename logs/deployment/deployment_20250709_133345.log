@@ -1,0 +1,8 @@
+[0;35m[2025-07-09 13:33:45] 🚀 Starting MySetlist Ultimate Deployment[0m
+[0m[2025-07-09 13:33:45] Deployment ID: 20250709_133345[0m
+[0m[2025-07-09 13:33:45] Logs: ./logs/deployment/deployment_20250709_133345.log[0m
+[0;36m[2025-07-09 13:33:45] 📋 Step 1: Environment Validation[0m
+[1;33m[2025-07-09 13:33:45] Starting rollback procedures...[0m
+[1;33m[2025-07-09 13:33:45] 🔄 Starting rollback procedures...[0m
+[1;33m[2025-07-09 13:33:45] Rollback procedures completed[0m
+[0m[2025-07-09 13:33:45] Deployment script completed with exit code: 1[0m

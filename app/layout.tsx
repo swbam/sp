@@ -10,6 +10,8 @@ import { RealtimeProvider } from '@/providers/RealtimeProvider';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import WebVitalsMonitor from '@/components/WebVitalsMonitor';
 import ProductionPerformanceMonitor from '@/components/ProductionPerformanceMonitor';
+import { AccessibilityProvider } from '@/components/AccessibilityProvider';
+import { PWAInstallPrompt } from '@/components/PWAInstallPrompt';
 import type { Metadata, Viewport } from 'next';
 
 // Optimized font loading with display swap
@@ -20,7 +22,7 @@ const font = Figtree({
   variable: '--font-figtree',
 });
 
-// Enhanced metadata for SEO and performance
+// Enhanced metadata for SEO, performance, and PWA
 export const metadata: Metadata = {
   title: {
     default: 'MySetlist - Concert Setlist Voting Platform',
@@ -31,6 +33,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'MySetlist Team' }],
   creator: 'MySetlist',
   publisher: 'MySetlist',
+  applicationName: 'MySetlist',
   formatDetection: {
     email: false,
     address: false,
@@ -40,6 +43,26 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'MySetlist',
+    startupImage: [
+      {
+        media: '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)',
+        url: '/images/apple-splash-640-1136.png'
+      },
+      {
+        media: '(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)',
+        url: '/images/apple-splash-750-1334.png'
+      },
+      {
+        media: '(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)',
+        url: '/images/apple-splash-828-1792.png'
+      }
+    ]
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -47,12 +70,21 @@ export const metadata: Metadata = {
     title: 'MySetlist - Concert Setlist Voting Platform',
     description: 'Vote on concert setlists and discover upcoming shows!',
     siteName: 'MySetlist',
+    images: [
+      {
+        url: '/images/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'MySetlist - Concert Setlist Voting Platform'
+      }
+    ]
   },
   twitter: {
     card: 'summary_large_image',
     title: 'MySetlist - Concert Setlist Voting Platform',
     description: 'Vote on concert setlists and discover upcoming shows!',
     creator: '@mysetlist',
+    images: ['/images/twitter-image.png']
   },
   robots: {
     index: true,
@@ -67,6 +99,17 @@ export const metadata: Metadata = {
   },
   verification: {
     google: process.env.GOOGLE_SITE_VERIFICATION,
+  },
+  other: {
+    // PWA specific meta tags
+    'mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent',
+    'msapplication-TileColor': '#10b981',
+    'msapplication-tap-highlight': 'no',
+    // Performance hints
+    'dns-prefetch': '//fonts.googleapis.com',
+    'preconnect': '//fonts.gstatic.com',
   },
 };
 
@@ -89,20 +132,45 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en" className={font.variable}>
+      <head>
+        {/* Service Worker Registration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(function(err) {
+                      console.log('ServiceWorker registration failed: ', err);
+                    });
+                });
+              }
+            `,
+          }}
+        />
+      </head>
       <body className="font-sans antialiased">
-        <ToasterProvider />
-        <SupabaseProvider>
-          <UserProvider>
-            <RealtimeProvider>
-              <ErrorBoundary>
-                <ModalProvider />
-                <Sidebar>{children}</Sidebar>
-              </ErrorBoundary>
-            </RealtimeProvider>
-          </UserProvider>
-        </SupabaseProvider>
-        <WebVitalsMonitor />
-        <ProductionPerformanceMonitor />
+        <AccessibilityProvider>
+          <ToasterProvider />
+          <SupabaseProvider>
+            <UserProvider>
+              <RealtimeProvider>
+                <ErrorBoundary>
+                  <ModalProvider />
+                  <main id="main-content" className="min-h-screen">
+                    <Sidebar>{children}</Sidebar>
+                  </main>
+                </ErrorBoundary>
+              </RealtimeProvider>
+            </UserProvider>
+          </SupabaseProvider>
+          <PWAInstallPrompt />
+          <WebVitalsMonitor />
+          <ProductionPerformanceMonitor />
+        </AccessibilityProvider>
         <Analytics />
       </body>
     </html>

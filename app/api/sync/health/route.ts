@@ -261,7 +261,7 @@ function checkSpotifyAvailability(): 'available' | 'unavailable' | 'unknown' {
 }
 
 function checkTicketmasterAvailability(): 'available' | 'unavailable' | 'unknown' {
-  if (!process.env.TICKETMASTER_API_KEY) {
+  if (!process.env.NEXT_PUBLIC_TICKETMASTER_API_KEY) {
     return 'unavailable';
   }
   return 'available'; // Would need actual API test for full check

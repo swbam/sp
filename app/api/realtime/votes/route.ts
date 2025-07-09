@@ -2,6 +2,11 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const setlistId = searchParams.get('setlist_id');

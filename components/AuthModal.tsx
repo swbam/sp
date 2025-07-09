@@ -8,12 +8,13 @@ import { useRouter } from 'next/navigation';
 
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { Modal } from './Modal';
+import type { Database } from '@/types_db';
 
 const AuthModal = () => {
   const { session } = useSessionContext();
   const router = useRouter();
   const { onClose, isOpen } = useAuthModal();
-  const supabaseClient = useSupabaseClient();
+  const supabaseClient = useSupabaseClient<Database>();
 
   useEffect(() => {
     if (session) {
@@ -38,7 +39,7 @@ const AuthModal = () => {
       <Auth
         theme="dark"
         providers={['spotify']}
-        supabaseClient={supabaseClient}
+        supabaseClient={supabaseClient as any}
         appearance={{
           theme: ThemeSupa,
           variables: {

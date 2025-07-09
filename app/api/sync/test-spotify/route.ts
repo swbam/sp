@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
 import { spotifyAPI } from '@/libs/spotify-api';
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
+
+
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

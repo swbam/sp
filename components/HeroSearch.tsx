@@ -16,7 +16,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({ className }) => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchValue.trim()) {
-      router.push(`/search?title=${encodeURIComponent(searchValue.trim())}`);
+      router.push(`/search?q=${encodeURIComponent(searchValue.trim())}`);
     }
   };
 

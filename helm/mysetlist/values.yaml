@@ -1,0 +1,339 @@
+# Default values for MySetlist Helm chart
+# This is a YAML-formatted file.
+
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+
+# Application configuration
+image:
+  registry: ghcr.io
+  repository: mysetlist/mysetlist
+  tag: "latest"
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Environment configuration
+environment: production
+
+# Deployment configuration
+deployment:
+  replicas: 3
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  annotations: {}
+  labels: {}
+
+# Pod configuration
+pod:
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "3000"
+    prometheus.io/path: "/api/metrics"
+  labels: {}
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    fsGroup: 1001
+    seccompProfile:
+      type: RuntimeDefault
+
+# Container configuration
+container:
+  name: mysetlist
+  port: 3000
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 1001
+    capabilities:
+      drop:
+        - ALL
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  livenessProbe:
+    httpGet:
+      path: /api/sync/health
+      port: http
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /api/sync/health
+      port: http
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 5
+    failureThreshold: 3
+  startupProbe:
+    httpGet:
+      path: /api/sync/health
+      port: http
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 5
+    failureThreshold: 10
+
+# Environment variables
+env:
+  NODE_ENV: production
+  PORT: "3000"
+  NEXT_TELEMETRY_DISABLED: "1"
+  HOSTNAME: "0.0.0.0"
+
+# Secrets configuration
+secrets:
+  create: true
+  name: ""
+  annotations: {}
+  data: {}
+    # supabase-url: ""
+    # supabase-anon-key: ""
+    # spotify-client-secret: ""
+    # jwt-secret: ""
+
+# ConfigMap configuration
+configMap:
+  create: true
+  name: ""
+  annotations: {}
+  data:
+    app-url: "https://mysetlist.com"
+    log-level: "info"
+    metrics-enabled: "true"
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 3000
+  targetPort: 3000
+  annotations: {}
+  labels: {}
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/enable-compression: "true"
+    nginx.ingress.kubernetes.io/compression-level: "6"
+  hosts:
+    - host: mysetlist.com
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: www.mysetlist.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: mysetlist-tls-cert
+      hosts:
+        - mysetlist.com
+        - www.mysetlist.com
+
+# Autoscaling configuration
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 60
+        - type: Pods
+          value: 4
+          periodSeconds: 60
+      selectPolicy: Max
+    scaleDown:
+      stabilizationWindowSeconds: 600
+      policies:
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+        - type: Pods
+          value: 2
+          periodSeconds: 60
+      selectPolicy: Min
+
+# Vertical Pod Autoscaler
+vpa:
+  enabled: true
+  updateMode: "Auto"
+  resourcePolicy:
+    minAllowed:
+      cpu: 100m
+      memory: 256Mi
+    maxAllowed:
+      cpu: 2
+      memory: 4Gi
+
+# Pod Disruption Budget
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2
+
+# Network Policy
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 3000
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: mysetlist-monitoring
+      ports:
+        - protocol: TCP
+          port: 3000
+
+# Persistence
+persistence:
+  enabled: false
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 8Gi
+  annotations: {}
+
+# ServiceAccount
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# RBAC
+rbac:
+  create: true
+
+# Monitoring
+monitoring:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    namespace: mysetlist-monitoring
+    interval: 30s
+    path: /api/metrics
+    labels:
+      team: mysetlist
+  prometheusRule:
+    enabled: true
+    namespace: mysetlist-monitoring
+    labels:
+      team: mysetlist
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - mysetlist
+          topologyKey: kubernetes.io/hostname
+
+# PostgreSQL (optional, if not using external Supabase)
+postgresql:
+  enabled: false
+  auth:
+    postgresPassword: ""
+    username: mysetlist
+    password: ""
+    database: mysetlist
+  primary:
+    persistence:
+      enabled: true
+      size: 50Gi
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 250m
+      limits:
+        memory: 1Gi
+        cpu: 500m
+
+# Redis (for caching)
+redis:
+  enabled: true
+  auth:
+    enabled: true
+    password: ""
+  master:
+    persistence:
+      enabled: true
+      size: 8Gi
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 100m
+      limits:
+        memory: 512Mi
+        cpu: 200m
+
+# Ingress Controller
+ingress-nginx:
+  enabled: false
+
+# Cert Manager
+cert-manager:
+  enabled: false
+
+# Additional volumes
+volumes: []
+
+# Additional volume mounts
+volumeMounts: []
+
+# Init containers
+initContainers: []
+
+# Sidecar containers
+sidecars: []
+
+# Tests
+tests:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: curlimages/curl
+    tag: latest

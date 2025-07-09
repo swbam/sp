@@ -1,0 +1,374 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: mysetlist-otel-collector
+  namespace: mysetlist-monitoring
+  labels:
+    app: opentelemetry
+    component: monitoring
+spec:
+  mode: deployment
+  replicas: 2
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+    limits:
+      memory: 1Gi
+      cpu: 500m
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+      
+      prometheus:
+        config:
+          scrape_configs:
+          - job_name: 'mysetlist-app'
+            static_configs:
+            - targets: ['mysetlist-app.mysetlist-production.svc.cluster.local:3000']
+            metrics_path: '/api/metrics'
+            scrape_interval: 30s
+      
+      k8s_cluster:
+        auth_type: serviceAccount
+        node: ${env:K8S_NODE_NAME}
+        metadata_exporters: [prometheus]
+      
+      kubeletstats:
+        collection_interval: 20s
+        auth_type: serviceAccount
+        endpoint: ${env:K8S_NODE_IP}:10250
+        insecure_skip_verify: true
+        metric_groups:
+          - node
+          - pod
+          - container
+          - volume
+    
+    processors:
+      batch:
+        timeout: 1s
+        send_batch_size: 1024
+      
+      memory_limiter:
+        limit_mib: 800
+        spike_limit_mib: 200
+      
+      resource:
+        attributes:
+        - key: service.name
+          value: mysetlist
+          action: upsert
+        - key: service.version
+          value: "1.0.0"
+          action: upsert
+        - key: environment
+          value: production
+          action: upsert
+        - key: cluster
+          value: mysetlist-production
+          action: upsert
+      
+      attributes:
+        actions:
+        - key: http.user_agent
+          action: delete
+        - key: http.request.header.authorization
+          action: delete
+        - key: http.request.header.cookie
+          action: delete
+      
+      span:
+        name:
+          to_attributes:
+            rules:
+            - ^\/api\/(.*)$
+        
+      probabilistic_sampler:
+        sampling_percentage: 10
+        hash_seed: 22
+      
+      tail_sampling:
+        decision_wait: 10s
+        num_traces: 100
+        expected_new_traces_per_sec: 10
+        policies:
+        - name: errors
+          type: status_code
+          status_code: {status_codes: [ERROR]}
+        - name: slow
+          type: latency
+          latency: {threshold_ms: 1000}
+        - name: random
+          type: probabilistic
+          probabilistic: {sampling_percentage: 5}
+    
+    exporters:
+      prometheus:
+        endpoint: "0.0.0.0:8889"
+        metric_relabeling:
+          - source_labels: [__name__]
+            regex: '.*grpc_io.*'
+            action: drop
+      
+      jaeger:
+        endpoint: jaeger-collector.mysetlist-monitoring.svc.cluster.local:14250
+        tls:
+          insecure: true
+      
+      loki:
+        endpoint: http://loki.mysetlist-monitoring.svc.cluster.local:3100/loki/api/v1/push
+        tenant_id: "mysetlist"
+        labels:
+          attributes:
+            service.name: "service_name"
+            service.version: "service_version"
+            k8s.pod.name: "k8s_pod_name"
+            k8s.namespace.name: "k8s_namespace_name"
+      
+      otlp/jaeger:
+        endpoint: http://jaeger-collector.mysetlist-monitoring.svc.cluster.local:4317
+        tls:
+          insecure: true
+      
+      logging:
+        loglevel: info
+        sampling_initial: 5
+        sampling_thereafter: 200
+    
+    extensions:
+      health_check:
+        endpoint: 0.0.0.0:13133
+      
+      pprof:
+        endpoint: 0.0.0.0:1777
+      
+      zpages:
+        endpoint: 0.0.0.0:55679
+      
+      memory_ballast:
+        size_mib: 512
+    
+    service:
+      extensions: [health_check, pprof, zpages, memory_ballast]
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [memory_limiter, resource, attributes, span, probabilistic_sampler, tail_sampling, batch]
+          exporters: [jaeger, otlp/jaeger, logging]
+        
+        metrics:
+          receivers: [otlp, prometheus, k8s_cluster, kubeletstats]
+          processors: [memory_limiter, resource, batch]
+          exporters: [prometheus, logging]
+        
+        logs:
+          receivers: [otlp]
+          processors: [memory_limiter, resource, attributes, batch]
+          exporters: [loki, logging]
+      
+      telemetry:
+        logs:
+          level: "info"
+        metrics:
+          address: 0.0.0.0:8888
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysetlist-otel-collector
+  namespace: mysetlist-monitoring
+  labels:
+    app: opentelemetry
+    component: monitoring
+spec:
+  type: ClusterIP
+  ports:
+  - name: otlp-grpc
+    port: 4317
+    targetPort: 4317
+    protocol: TCP
+  - name: otlp-http
+    port: 4318
+    targetPort: 4318
+    protocol: TCP
+  - name: metrics
+    port: 8889
+    targetPort: 8889
+    protocol: TCP
+  - name: health
+    port: 13133
+    targetPort: 13133
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: mysetlist-otel-collector
+
+---
+# Jaeger for distributed tracing
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: mysetlist-jaeger
+  namespace: mysetlist-monitoring
+  labels:
+    app: jaeger
+    component: monitoring
+spec:
+  strategy: production
+  storage:
+    type: elasticsearch
+    elasticsearch:
+      nodeCount: 3
+      redundancyPolicy: SingleRedundancy
+      resources:
+        requests:
+          memory: 2Gi
+          cpu: 500m
+        limits:
+          memory: 4Gi
+          cpu: 1
+      storage:
+        size: 50Gi
+        storageClassName: ssd
+  collector:
+    replicas: 2
+    resources:
+      requests:
+        memory: 512Mi
+        cpu: 250m
+      limits:
+        memory: 1Gi
+        cpu: 500m
+  query:
+    replicas: 2
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 100m
+      limits:
+        memory: 512Mi
+        cpu: 250m
+  agent:
+    strategy: sidecar
+
+---
+# Service Monitor for OpenTelemetry Collector
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: otel-collector
+  namespace: mysetlist-monitoring
+  labels:
+    app: opentelemetry
+    team: mysetlist
+    component: monitoring
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mysetlist-otel-collector
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+    honorLabels: true
+
+---
+# Node Exporter for system metrics
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-exporter
+  namespace: mysetlist-monitoring
+  labels:
+    app: node-exporter
+    component: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: node-exporter
+  template:
+    metadata:
+      labels:
+        app: node-exporter
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9100"
+    spec:
+      hostNetwork: true
+      hostPID: true
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      - key: node-role.kubernetes.io/control-plane
+        effect: NoSchedule
+      containers:
+      - name: node-exporter
+        image: prom/node-exporter:v1.7.0
+        args:
+        - --path.procfs=/host/proc
+        - --path.sysfs=/host/sys
+        - --path.rootfs=/host/root
+        - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)
+        ports:
+        - containerPort: 9100
+          hostPort: 9100
+          name: metrics
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 100m
+          limits:
+            memory: 256Mi
+            cpu: 200m
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65534
+        volumeMounts:
+        - name: proc
+          mountPath: /host/proc
+          readOnly: true
+        - name: sys
+          mountPath: /host/sys
+          readOnly: true
+        - name: root
+          mountPath: /host/root
+          readOnly: true
+      volumes:
+      - name: proc
+        hostPath:
+          path: /proc
+      - name: sys
+        hostPath:
+          path: /sys
+      - name: root
+        hostPath:
+          path: /
+      terminationGracePeriodSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-exporter
+  namespace: mysetlist-monitoring
+  labels:
+    app: node-exporter
+    component: monitoring
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9100"
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - port: 9100
+    targetPort: 9100
+    name: metrics
+  selector:
+    app: node-exporter

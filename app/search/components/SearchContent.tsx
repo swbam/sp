@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { TicketmasterArtist } from '@/libs/ticketmaster';
+import type { Artist } from '@/types';
 import MediaItem from '@/components/MediaItem';
 
 interface SearchContentProps {
@@ -16,7 +16,7 @@ const SearchContent: React.FC<SearchContentProps> = ({
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [artists, setArtists] = useState<TicketmasterArtist[]>([]);
+  const [artists, setArtists] = useState<Artist[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const SearchContent: React.FC<SearchContentProps> = ({
         }
 
         const data = await response.json();
-        setArtists(data);
+        setArtists(data || []);
       } catch (err) {
         console.error('Search error:', err);
         setError('Failed to load search results');
@@ -72,18 +72,16 @@ const SearchContent: React.FC<SearchContentProps> = ({
   return (
     <div className="flex flex-col gap-y-2 w-full px-6">
       {artists.map((artist) => (
-        <div
-          key={artist.id}
-          className="flex items-center gap-x-4 w-full cursor-pointer hover:bg-neutral-800/50 rounded-md p-2"
-          onClick={() => router.push(`/artists/${artist.id}`)}
-        >
+        <div key={artist.id} className="w-full">
           <MediaItem
             data={{
               id: artist.id,
+              name: artist.name,
               title: artist.name,
-              author: artist.genres.join(', ') || 'Music',
-              image_path: artist.images[0]?.url || '/images/music-placeholder.png'
+              artist_name: artist.genres.join(', ') || 'Music',
+              image_url: artist.image_url || '/images/music-placeholder.png'
             }}
+            onClick={() => router.push(`/artists/${artist.slug}`)}
           />
         </div>
       ))}

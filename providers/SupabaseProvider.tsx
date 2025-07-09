@@ -15,12 +15,12 @@ interface SupabaseProviderProps {
 //* SupabaseProvider component definition
 export const SupabaseProvider: React.FC<SupabaseProviderProps> = ({ children }) => {
   //* Using React's useState to hold the Supabase client object
-  const [supabaseClient, setSupabaseClient] = useState<SupabaseClient | null>(null);
+  const [supabaseClient, setSupabaseClient] = useState<any>(null);
 
   //* useEffect hook to initialize the Supabase client when this component mounts
   useEffect(() => {
     const client = createClientComponentClient<Database>();
-    setSupabaseClient(client);
+    setSupabaseClient(client as any);
   }, []);
 
   //* If the Supabase client is not initialized, render nothing (or a loading spinner)

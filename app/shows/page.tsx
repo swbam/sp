@@ -122,14 +122,8 @@ export default async function ShowsPage() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {transformedFeatured.slice(0, 6).map((show) => (
-                <div key={show.id} className="bg-neutral-800 rounded-lg p-4 hover:bg-neutral-700 transition cursor-pointer"
-                     onClick={() => {
-                       try {
-                         window.location.href = `/shows/${show.id}`;
-                       } catch (error) {
-                         console.error('Navigation error:', error);
-                       }
-                     }}>
+                <div key={show.id} className="bg-neutral-800 rounded-lg p-4 hover:bg-neutral-700 transition">
+                  <a href={`/shows/${show.id}`} className="block">
                   <div className="flex items-center gap-4">
                     <div className="relative w-16 h-16 rounded-md overflow-hidden">
                       <Image
@@ -148,6 +142,7 @@ export default async function ShowsPage() {
                       </p>
                     </div>
                   </div>
+                  </a>
                 </div>
               ))}
             </div>

@@ -1,0 +1,1677 @@
+{
+  "timestamp": "2025-07-09T02:41:42.149Z",
+  "overallScore": 87.5,
+  "deviceResults": [
+    {
+      "device": "iPhone SE (2022)",
+      "width": 375,
+      "height": 667,
+      "scenarios": [
+        {
+          "name": "Homepage Mobile Experience",
+          "url": "/",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Search Page Mobile",
+          "url": "/search",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Artist Page Mobile",
+          "url": "/artists/test-artist",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Shows Page Mobile",
+          "url": "/shows",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Show Detail Mobile",
+          "url": "/shows/test-show",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Trending Page Mobile",
+          "url": "/trending",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        }
+      ],
+      "overallScore": 100,
+      "status": "GOOD"
+    },
+    {
+      "device": "iPhone 14",
+      "width": 390,
+      "height": 844,
+      "scenarios": [
+        {
+          "name": "Homepage Mobile Experience",
+          "url": "/",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Search Page Mobile",
+          "url": "/search",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Artist Page Mobile",
+          "url": "/artists/test-artist",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Shows Page Mobile",
+          "url": "/shows",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Show Detail Mobile",
+          "url": "/shows/test-show",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Trending Page Mobile",
+          "url": "/trending",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        }
+      ],
+      "overallScore": 100,
+      "status": "GOOD"
+    },
+    {
+      "device": "iPhone 14 Pro Max",
+      "width": 428,
+      "height": 926,
+      "scenarios": [
+        {
+          "name": "Homepage Mobile Experience",
+          "url": "/",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Search Page Mobile",
+          "url": "/search",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Artist Page Mobile",
+          "url": "/artists/test-artist",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Shows Page Mobile",
+          "url": "/shows",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Show Detail Mobile",
+          "url": "/shows/test-show",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Trending Page Mobile",
+          "url": "/trending",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        }
+      ],
+      "overallScore": 100,
+      "status": "GOOD"
+    },
+    {
+      "device": "Samsung Galaxy S21",
+      "width": 360,
+      "height": 800,
+      "scenarios": [
+        {
+          "name": "Homepage Mobile Experience",
+          "url": "/",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": false,
+              "details": "Text may be too small on narrow screens"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [
+            "Text may be too small on narrow screens",
+            "Hero search may be cramped on narrow screens"
+          ],
+          "recommendations": [
+            "Use responsive text sizing",
+            "Consider smaller hero text on mobile"
+          ],
+          "score": 75,
+          "status": "NEEDS_WORK"
+        },
+        {
+          "name": "Search Page Mobile",
+          "url": "/search",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": false,
+              "details": "Text may be too small on narrow screens"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [
+            "Text may be too small on narrow screens"
+          ],
+          "recommendations": [
+            "Use responsive text sizing"
+          ],
+          "score": 75,
+          "status": "NEEDS_WORK"
+        },
+        {
+          "name": "Artist Page Mobile",
+          "url": "/artists/test-artist",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": false,
+              "details": "Text may be too small on narrow screens"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [
+            "Text may be too small on narrow screens"
+          ],
+          "recommendations": [
+            "Use responsive text sizing"
+          ],
+          "score": 75,
+          "status": "NEEDS_WORK"
+        },
+        {
+          "name": "Shows Page Mobile",
+          "url": "/shows",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": false,
+              "details": "Text may be too small on narrow screens"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [
+            "Text may be too small on narrow screens"
+          ],
+          "recommendations": [
+            "Use responsive text sizing"
+          ],
+          "score": 75,
+          "status": "NEEDS_WORK"
+        },
+        {
+          "name": "Show Detail Mobile",
+          "url": "/shows/test-show",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": false,
+              "details": "Text may be too small on narrow screens"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [
+            "Text may be too small on narrow screens",
+            "Vote buttons may be too close together"
+          ],
+          "recommendations": [
+            "Use responsive text sizing",
+            "Increase spacing between vote buttons"
+          ],
+          "score": 75,
+          "status": "NEEDS_WORK"
+        },
+        {
+          "name": "Trending Page Mobile",
+          "url": "/trending",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": false,
+              "details": "Text may be too small on narrow screens"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [
+            "Text may be too small on narrow screens"
+          ],
+          "recommendations": [
+            "Use responsive text sizing"
+          ],
+          "score": 75,
+          "status": "NEEDS_WORK"
+        }
+      ],
+      "overallScore": 75,
+      "status": "NEEDS_WORK"
+    },
+    {
+      "device": "Samsung Galaxy S21 Ultra",
+      "width": 384,
+      "height": 854,
+      "scenarios": [
+        {
+          "name": "Homepage Mobile Experience",
+          "url": "/",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Search Page Mobile",
+          "url": "/search",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Artist Page Mobile",
+          "url": "/artists/test-artist",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Shows Page Mobile",
+          "url": "/shows",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Show Detail Mobile",
+          "url": "/shows/test-show",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Trending Page Mobile",
+          "url": "/trending",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        }
+      ],
+      "overallScore": 100,
+      "status": "GOOD"
+    },
+    {
+      "device": "Google Pixel 6",
+      "width": 393,
+      "height": 851,
+      "scenarios": [
+        {
+          "name": "Homepage Mobile Experience",
+          "url": "/",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Search Page Mobile",
+          "url": "/search",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Artist Page Mobile",
+          "url": "/artists/test-artist",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Shows Page Mobile",
+          "url": "/shows",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Show Detail Mobile",
+          "url": "/shows/test-show",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Trending Page Mobile",
+          "url": "/trending",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        }
+      ],
+      "overallScore": 100,
+      "status": "GOOD"
+    },
+    {
+      "device": "iPad Mini",
+      "width": 768,
+      "height": 1024,
+      "scenarios": [
+        {
+          "name": "Homepage Mobile Experience",
+          "url": "/",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Search Page Mobile",
+          "url": "/search",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Artist Page Mobile",
+          "url": "/artists/test-artist",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Shows Page Mobile",
+          "url": "/shows",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Show Detail Mobile",
+          "url": "/shows/test-show",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        },
+        {
+          "name": "Trending Page Mobile",
+          "url": "/trending",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Text readability",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": true,
+              "details": "OK"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [],
+          "recommendations": [],
+          "score": 100,
+          "status": "GOOD"
+        }
+      ],
+      "overallScore": 100,
+      "status": "GOOD"
+    },
+    {
+      "device": "Small Mobile (320px)",
+      "width": 320,
+      "height": 568,
+      "scenarios": [
+        {
+          "name": "Homepage Mobile Experience",
+          "url": "/",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": false,
+              "details": "Very narrow viewport may cause layout issues"
+            },
+            {
+              "name": "Text readability",
+              "passed": false,
+              "details": "Text may be too small on narrow screens"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": false,
+              "details": "Touch targets may be too small"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [
+            "Very narrow viewport may cause layout issues",
+            "Text may be too small on narrow screens",
+            "Touch targets may be too small",
+            "Hero search may be cramped on narrow screens",
+            "Quick action buttons may wrap awkwardly"
+          ],
+          "recommendations": [
+            "Ensure minimum width handling",
+            "Use responsive text sizing",
+            "Increase button padding on small screens",
+            "Consider smaller hero text on mobile",
+            "Stack buttons vertically on narrow screens"
+          ],
+          "score": 25,
+          "status": "POOR"
+        },
+        {
+          "name": "Search Page Mobile",
+          "url": "/search",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": false,
+              "details": "Very narrow viewport may cause layout issues"
+            },
+            {
+              "name": "Text readability",
+              "passed": false,
+              "details": "Text may be too small on narrow screens"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": false,
+              "details": "Touch targets may be too small"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [
+            "Very narrow viewport may cause layout issues",
+            "Text may be too small on narrow screens",
+            "Touch targets may be too small"
+          ],
+          "recommendations": [
+            "Ensure minimum width handling",
+            "Use responsive text sizing",
+            "Increase button padding on small screens"
+          ],
+          "score": 25,
+          "status": "POOR"
+        },
+        {
+          "name": "Artist Page Mobile",
+          "url": "/artists/test-artist",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": false,
+              "details": "Very narrow viewport may cause layout issues"
+            },
+            {
+              "name": "Text readability",
+              "passed": false,
+              "details": "Text may be too small on narrow screens"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": false,
+              "details": "Touch targets may be too small"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [
+            "Very narrow viewport may cause layout issues",
+            "Text may be too small on narrow screens",
+            "Touch targets may be too small"
+          ],
+          "recommendations": [
+            "Ensure minimum width handling",
+            "Use responsive text sizing",
+            "Increase button padding on small screens"
+          ],
+          "score": 25,
+          "status": "POOR"
+        },
+        {
+          "name": "Shows Page Mobile",
+          "url": "/shows",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": false,
+              "details": "Very narrow viewport may cause layout issues"
+            },
+            {
+              "name": "Text readability",
+              "passed": false,
+              "details": "Text may be too small on narrow screens"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": false,
+              "details": "Touch targets may be too small"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [
+            "Very narrow viewport may cause layout issues",
+            "Text may be too small on narrow screens",
+            "Touch targets may be too small"
+          ],
+          "recommendations": [
+            "Ensure minimum width handling",
+            "Use responsive text sizing",
+            "Increase button padding on small screens"
+          ],
+          "score": 25,
+          "status": "POOR"
+        },
+        {
+          "name": "Show Detail Mobile",
+          "url": "/shows/test-show",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": false,
+              "details": "Very narrow viewport may cause layout issues"
+            },
+            {
+              "name": "Text readability",
+              "passed": false,
+              "details": "Text may be too small on narrow screens"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": false,
+              "details": "Touch targets may be too small"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [
+            "Very narrow viewport may cause layout issues",
+            "Text may be too small on narrow screens",
+            "Touch targets may be too small",
+            "Vote buttons may be too close together",
+            "Setlist songs may be cramped"
+          ],
+          "recommendations": [
+            "Ensure minimum width handling",
+            "Use responsive text sizing",
+            "Increase button padding on small screens",
+            "Increase spacing between vote buttons",
+            "Optimize setlist item layout for mobile"
+          ],
+          "score": 25,
+          "status": "POOR"
+        },
+        {
+          "name": "Trending Page Mobile",
+          "url": "/trending",
+          "tests": [
+            {
+              "name": "Viewport width handling",
+              "passed": false,
+              "details": "Very narrow viewport may cause layout issues"
+            },
+            {
+              "name": "Text readability",
+              "passed": false,
+              "details": "Text may be too small on narrow screens"
+            },
+            {
+              "name": "Touch target accessibility",
+              "passed": false,
+              "details": "Touch targets may be too small"
+            },
+            {
+              "name": "Content layout",
+              "passed": true,
+              "details": "OK"
+            }
+          ],
+          "issues": [
+            "Very narrow viewport may cause layout issues",
+            "Text may be too small on narrow screens",
+            "Touch targets may be too small"
+          ],
+          "recommendations": [
+            "Ensure minimum width handling",
+            "Use responsive text sizing",
+            "Increase button padding on small screens"
+          ],
+          "score": 25,
+          "status": "POOR"
+        }
+      ],
+      "overallScore": 25,
+      "status": "POOR"
+    }
+  ],
+  "scenarioAverages": {
+    "Homepage Mobile Experience": 87.5,
+    "Search Page Mobile": 87.5,
+    "Artist Page Mobile": 87.5,
+    "Shows Page Mobile": 87.5,
+    "Show Detail Mobile": 87.5,
+    "Trending Page Mobile": 87.5
+  },
+  "commonIssues": [
+    [
+      "Text may be too small on narrow screens",
+      12
+    ],
+    [
+      "Very narrow viewport may cause layout issues",
+      6
+    ],
+    [
+      "Touch targets may be too small",
+      6
+    ],
+    [
+      "Hero search may be cramped on narrow screens",
+      2
+    ],
+    [
+      "Vote buttons may be too close together",
+      2
+    ],
+    [
+      "Quick action buttons may wrap awkwardly",
+      1
+    ],
+    [
+      "Setlist songs may be cramped",
+      1
+    ]
+  ],
+  "topRecommendations": [
+    [
+      "Use responsive text sizing",
+      12
+    ],
+    [
+      "Ensure minimum width handling",
+      6
+    ],
+    [
+      "Increase button padding on small screens",
+      6
+    ],
+    [
+      "Consider smaller hero text on mobile",
+      2
+    ],
+    [
+      "Increase spacing between vote buttons",
+      2
+    ],
+    [
+      "Stack buttons vertically on narrow screens",
+      1
+    ],
+    [
+      "Optimize setlist item layout for mobile",
+      1
+    ]
+  ],
+  "summary": {
+    "totalDevicesTested": 8,
+    "goodDevices": 6,
+    "needsWorkDevices": 1,
+    "poorDevices": 1,
+    "status": "GOOD"
+  }
+}
