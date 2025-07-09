@@ -69,6 +69,33 @@ const SearchContent: React.FC<SearchContentProps> = ({
     );
   }
 
+  const handleArtistClick = async (artist: Artist) => {
+    try {
+      // Create artist in database if it doesn't exist
+      const response = await fetch(`/api/artists/${artist.slug}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: artist.name,
+          image_url: artist.image_url,
+          genres: artist.genres,
+          ticketmaster_id: artist.id
+        })
+      });
+
+      if (response.ok) {
+        // Navigate to artist page
+        router.push(`/artists/${artist.slug}`);
+      } else {
+        console.error('Failed to create artist');
+      }
+    } catch (error) {
+      console.error('Error creating artist:', error);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-y-2 w-full px-6">
       {artists.map((artist) => (
@@ -81,7 +108,7 @@ const SearchContent: React.FC<SearchContentProps> = ({
               artist_name: artist.genres.join(', ') || 'Music',
               image_url: artist.image_url || '/images/music-placeholder.png'
             }}
-            onClick={() => router.push(`/artists/${artist.slug}`)}
+            onClick={() => handleArtistClick(artist)}
           />
         </div>
       ))}
