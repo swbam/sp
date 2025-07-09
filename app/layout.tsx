@@ -7,11 +7,14 @@ import { UserProvider } from '@/providers/UserProvider';
 import { ModalProvider } from '@/providers/ModalProvider';
 import { ToasterProvider } from '@/providers/ToasterProvider';
 import { RealtimeProvider } from '@/providers/RealtimeProvider';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import WebVitalsMonitor from '@/components/WebVitalsMonitor';
-import ProductionPerformanceMonitor from '@/components/ProductionPerformanceMonitor';
+import { PageErrorBoundary } from '@/components/EnhancedErrorBoundary';
 import { AccessibilityProvider } from '@/components/AccessibilityProvider';
-import { PWAInstallPrompt } from '@/components/PWAInstallPrompt';
+import { 
+  SuspenseWebVitalsMonitor, 
+  SuspenseProductionPerformanceMonitor, 
+  SuspensePWAInstallPrompt 
+} from '@/components/LazyComponents';
+import { ResourceHints } from '@/components/PerformanceOptimization';
 import type { Metadata, Viewport } from 'next';
 
 // Optimized font loading with display swap
@@ -133,6 +136,14 @@ export default async function RootLayout({
   return (
     <html lang="en" className={font.variable}>
       <head>
+        {/* Resource hints for performance */}
+        <ResourceHints
+          preload={['/fonts/figtree.woff2']}
+          preconnect={['https://eotvxxipggnqxonvzkks.supabase.co', 'https://i.scdn.co']}
+          dnsPrefetch={['//via.placeholder.com', '//vercel.com']}
+          prefetch={['/api/trending', '/api/featured']}
+        />
+        
         {/* Service Worker Registration */}
         <script
           dangerouslySetInnerHTML={{
@@ -153,24 +164,24 @@ export default async function RootLayout({
         />
       </head>
       <body className="font-sans antialiased">
-        <AccessibilityProvider>
-          <ToasterProvider />
-          <SupabaseProvider>
-            <UserProvider>
-              <RealtimeProvider>
-                <ErrorBoundary>
+        <PageErrorBoundary>
+          <AccessibilityProvider>
+            <ToasterProvider />
+            <SupabaseProvider>
+              <UserProvider>
+                <RealtimeProvider>
                   <ModalProvider />
                   <main id="main-content" className="min-h-screen">
                     <Sidebar>{children}</Sidebar>
                   </main>
-                </ErrorBoundary>
-              </RealtimeProvider>
-            </UserProvider>
-          </SupabaseProvider>
-          <PWAInstallPrompt />
-          <WebVitalsMonitor />
-          <ProductionPerformanceMonitor />
-        </AccessibilityProvider>
+                </RealtimeProvider>
+              </UserProvider>
+            </SupabaseProvider>
+            <SuspensePWAInstallPrompt />
+            <SuspenseWebVitalsMonitor />
+            <SuspenseProductionPerformanceMonitor />
+          </AccessibilityProvider>
+        </PageErrorBoundary>
         <Analytics />
       </body>
     </html>

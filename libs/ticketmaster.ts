@@ -1,6 +1,41 @@
-const TICKETMASTER_API_KEY = process.env.TICKETMASTER_API_KEY || process.env.NEXT_PUBLIC_TICKETMASTER_API_KEY;
-const TICKETMASTER_BASE_URL = 'https://app.ticketmaster.com/discovery/v2';
+// Re-export optimized functions for backward compatibility
+export { 
+  searchArtistsOptimized as searchArtists,
+  searchEventsOptimized as searchEvents,
+  ticketmasterClient,
+  type TicketmasterArtist,
+  type TicketmasterEvent,
+  checkExternalAPIHealth,
+  getAPIStats,
+  clearExternalAPICache,
+  warmupExternalAPICache
+} from './external-api-optimizer';
 
+// Legacy function for backward compatibility
+export async function searchArtistsLegacy(query: string): Promise<TicketmasterArtist[]> {
+  const { searchArtistsOptimized } = await import('./external-api-optimizer');
+  return searchArtistsOptimized(query);
+}
+
+// Enhanced search with better defaults
+export async function searchArtistsEnhanced(
+  query: string,
+  options: {
+    limit?: number;
+    includeSpotify?: boolean;
+    countryCode?: string;
+  } = {}
+): Promise<TicketmasterArtist[]> {
+  const { searchArtistsOptimized } = await import('./external-api-optimizer');
+  
+  return searchArtistsOptimized(query, {
+    limit: options.limit || 20,
+    includeSpotify: options.includeSpotify || false,
+    countryCode: options.countryCode || 'US'
+  });
+}
+
+// Types for backward compatibility
 export interface TicketmasterArtist {
   id: string;
   name: string;
@@ -12,43 +47,45 @@ export interface TicketmasterArtist {
   }>;
   genres: string[];
   url: string;
+  externalLinks?: {
+    spotify?: string;
+    musicbrainz?: string;
+    homepage?: string;
+  };
+  followers?: number;
+  popularity?: number;
 }
 
-export async function searchArtists(query: string): Promise<TicketmasterArtist[]> {
-  if (!TICKETMASTER_API_KEY) {
-    throw new Error('Ticketmaster API key not configured');
-  }
-
-  try {
-    const response = await fetch(
-      `${TICKETMASTER_BASE_URL}/attractions.json?` + 
-      `keyword=${encodeURIComponent(query)}` +
-      `&classificationName=music` +
-      `&size=20` +
-      `&apikey=${TICKETMASTER_API_KEY}`
-    );
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch from Ticketmaster API');
-    }
-
-    const data = await response.json();
-    
-    if (!data._embedded?.attractions) {
-      return [];
-    }
-
-    return data._embedded.attractions.map((attraction: any) => ({
-      id: attraction.id,
-      name: attraction.name,
-      images: attraction.images || [],
-      genres: attraction.classifications?.[0]?.genre?.name 
-        ? [attraction.classifications[0].genre.name]
-        : [],
-      url: attraction.url
-    }));
-  } catch (error) {
-    console.error('Error searching Ticketmaster artists:', error);
-    return [];
-  }
+export interface TicketmasterEvent {
+  id: string;
+  name: string;
+  type: string;
+  url: string;
+  locale: string;
+  images: Array<{
+    url: string;
+    ratio: string;
+    width: number;
+    height: number;
+  }>;
+  dates: {
+    start: {
+      localDate: string;
+      localTime?: string;
+      dateTime?: string;
+    };
+    status: {
+      code: string;
+    };
+  };
+  _embedded?: {
+    venues?: Array<any>;
+    attractions?: TicketmasterArtist[];
+  };
+  priceRanges?: Array<{
+    type: string;
+    currency: string;
+    min: number;
+    max: number;
+  }>;
 } 

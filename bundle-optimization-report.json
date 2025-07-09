@@ -1,0 +1,25 @@
+{
+  "timestamp": "2025-07-09T21:53:51.626Z",
+  "bundleSizes": {
+    "total": 4936027,
+    "javascript": 4867363,
+    "css": 37951,
+    "images": 30412,
+    "fonts": 0,
+    "other": 301
+  },
+  "targets": {
+    "total": 10485760,
+    "javascript": 5242880,
+    "css": 512000,
+    "images": 3145728,
+    "fonts": 1048576,
+    "other": 1572864
+  },
+  "recommendations": [],
+  "performance": {
+    "meetsTarget": true,
+    "compressionRatio": 0,
+    "loadTimeEstimate": 9
+  }
+}

@@ -16,7 +16,10 @@ const nextConfig = {
       'lucide-react',
       '@radix-ui/react-dialog',
       'tailwind-merge',
-      'query-string'
+      'query-string',
+      'framer-motion',
+      'immer',
+      'zustand'
     ],
     turbo: {
       rules: {
@@ -28,6 +31,8 @@ const nextConfig = {
     },
     // optimizeCss: true, // Disabled due to critters dependency issue
     webVitalsAttribution: ['CLS', 'LCP', 'FCP', 'INP', 'TTFB'],
+    // Optimize fonts
+    optimizeServerReact: true,
   },
 
   // Image optimization
@@ -71,6 +76,8 @@ const nextConfig = {
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
         chunks: 'all',
+        minSize: 20000,
+        maxSize: 244000,
         cacheGroups: {
           default: {
             minChunks: 2,
@@ -89,9 +96,37 @@ const nextConfig = {
             priority: -30,
             reuseExistingChunk: true,
           },
+          // Separate chunk for react-icons
+          reactIcons: {
+            test: /[\\/]node_modules[\\/]react-icons[\\/]/,
+            name: 'react-icons',
+            priority: 10,
+            chunks: 'all',
+          },
+          // Separate chunk for framer-motion
+          framerMotion: {
+            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+            name: 'framer-motion',
+            priority: 10,
+            chunks: 'all',
+          },
+          // Separate chunk for UI libraries
+          ui: {
+            test: /[\\/]node_modules[\\/](@radix-ui|lucide-react)[\\/]/,
+            name: 'ui-libs',
+            priority: 10,
+            chunks: 'all',
+          },
         },
       };
+      
+      // Tree shaking optimization
+      config.optimization.usedExports = true;
+      config.optimization.providedExports = true;
+      config.optimization.sideEffects = false;
     }
+    
+    // Optimize imports (removed babel-loader to avoid conflicts)
     
     return config;
   },
