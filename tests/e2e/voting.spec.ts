@@ -254,9 +254,18 @@ test.describe('Voting System', () => {
     if (hasAuthModal) {
       console.log('✅ Authentication required for voting')
       
+      // Test modal accessibility
+      await expect(authModal).toHaveAttribute('role', 'dialog')
+      await expect(authModal).toHaveAttribute('aria-modal', 'true')
+      
+      // Test focus management
+      const focusedElement = page.locator(':focus')
+      await expect(focusedElement).toBeVisible()
+      
       // Test that modal can be closed
       const closeButton = authModal.getByTestId('close-button')
         .or(authModal.locator('[aria-label="Close"]'))
+        .or(authModal.locator('button:has-text("Close")'))
         .first()
       
       const hasCloseButton = await closeButton.isVisible().catch(() => false)
@@ -265,6 +274,13 @@ test.describe('Voting System', () => {
         await closeButton.click()
         
         // Modal should disappear
+        await expect(authModal).toBeHidden()
+        
+        // Focus should return to trigger element
+        await expect(voteButton).toBeFocused()
+      } else {
+        // Try ESC key to close modal
+        await page.keyboard.press('Escape')
         await expect(authModal).toBeHidden()
       }
     } else {
@@ -277,6 +293,9 @@ test.describe('Voting System', () => {
       
       if (hasNotification) {
         console.log('✅ Authentication notification displayed')
+        
+        // Test notification accessibility
+        await expect(notification).toHaveAttribute('role', 'alert')
       } else {
         console.log('ℹ️  Voting may be allowed without authentication')
       }
@@ -371,8 +390,9 @@ test.describe('Voting System', () => {
   })
 
   test('should handle vote submission errors gracefully', async ({ page }) => {
-    // Intercept voting API to simulate errors
+    // Intercept voting API to simulate different error scenarios
     await page.route('**/api/votes**', route => {
+      // Simulate network error
       route.abort('failed')
     })
     
@@ -393,6 +413,10 @@ test.describe('Voting System', () => {
     if (hasErrorNotification) {
       console.log('✅ Vote error handling implemented')
       
+      // Test error notification accessibility
+      await expect(errorNotification).toHaveAttribute('role', 'alert')
+      await expect(errorNotification).toHaveAttribute('aria-live', 'polite')
+      
       // Test retry functionality
       const retryButton = page.getByTestId('retry-vote')
         .or(page.getByText(/retry|try again/i))
@@ -401,6 +425,9 @@ test.describe('Voting System', () => {
       const hasRetryButton = await retryButton.isVisible().catch(() => false)
       
       if (hasRetryButton) {
+        // Test retry button accessibility
+        await expect(retryButton).toHaveAttribute('aria-label')
+        
         // Remove route interception to allow retry
         await page.unroute('**/api/votes**')
         
@@ -418,7 +445,51 @@ test.describe('Voting System', () => {
       
       if (isDisabled || hasLoadingClass) {
         console.log('✅ Vote button shows loading/error state')
+        
+        // Test that disabled button has proper ARIA attributes
+        await expect(voteButton).toHaveAttribute('aria-disabled', 'true')
       }
+    }
+    
+    // Test different error scenarios
+    await page.unroute('**/api/votes**')
+    
+    // Test server error (500)
+    await page.route('**/api/votes**', route => {
+      route.fulfill({
+        status: 500,
+        body: JSON.stringify({ error: 'Internal server error' })
+      })
+    })
+    
+    await voteButton.click()
+    await page.waitForTimeout(2000)
+    
+    const serverErrorNotification = page.getByText(/server error|internal error/i).first()
+    const hasServerErrorNotification = await serverErrorNotification.isVisible().catch(() => false)
+    
+    if (hasServerErrorNotification) {
+      console.log('✅ Server error handling implemented')
+    }
+    
+    // Test rate limiting (429)
+    await page.unroute('**/api/votes**')
+    
+    await page.route('**/api/votes**', route => {
+      route.fulfill({
+        status: 429,
+        body: JSON.stringify({ error: 'Rate limit exceeded' })
+      })
+    })
+    
+    await voteButton.click()
+    await page.waitForTimeout(2000)
+    
+    const rateLimitNotification = page.getByText(/rate limit|too many requests/i).first()
+    const hasRateLimitNotification = await rateLimitNotification.isVisible().catch(() => false)
+    
+    if (hasRateLimitNotification) {
+      console.log('✅ Rate limit error handling implemented')
     }
   })
 

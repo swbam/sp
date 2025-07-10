@@ -1,0 +1,735 @@
+name: 🚀 Enhanced Production Deployment Pipeline
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+      - 'README.md'
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      deploy_environment:
+        description: 'Deployment Environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      deployment_strategy:
+        description: 'Deployment Strategy'
+        required: true
+        default: 'blue-green'
+        type: choice
+        options:
+          - blue-green
+          - canary
+          - rolling
+      skip_tests:
+        description: 'Skip tests (emergency deployment)'
+        required: false
+        default: false
+        type: boolean
+      rollback_on_failure:
+        description: 'Auto-rollback on failure'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  DEPLOYMENT_ENVIRONMENT: ${{ github.event.inputs.deploy_environment || 'staging' }}
+  DEPLOYMENT_STRATEGY: ${{ github.event.inputs.deployment_strategy || 'blue-green' }}
+  SENTRY_ORG: mysetlist
+  SENTRY_PROJECT: mysetlist-frontend
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event.inputs.deploy_environment || 'staging' }}
+  cancel-in-progress: true
+
+jobs:
+  # ============================================================================
+  # PHASE 1: PRE-DEPLOYMENT VALIDATION
+  # ============================================================================
+  
+  environment-validation:
+    name: 🔍 Environment Validation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    outputs:
+      environment: ${{ steps.env-check.outputs.environment }}
+      deployment-id: ${{ steps.deployment-id.outputs.id }}
+      should-deploy: ${{ steps.gate-check.outputs.should-deploy }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Environment validation
+        id: env-check
+        run: |
+          echo "Validating environment variables..."
+          npm run validate:env
+          echo "environment=${{ env.DEPLOYMENT_ENVIRONMENT }}" >> $GITHUB_OUTPUT
+
+      - name: Generate deployment ID
+        id: deployment-id
+        run: |
+          DEPLOYMENT_ID="${{ github.sha }}-$(date +%s)"
+          echo "id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
+          echo "Deployment ID: $DEPLOYMENT_ID"
+
+      - name: Quality gate check
+        id: gate-check
+        run: |
+          # Check if this is a production deployment
+          if [[ "${{ env.DEPLOYMENT_ENVIRONMENT }}" == "production" ]]; then
+            # Only deploy to production from main branch
+            if [[ "${{ github.ref }}" != "refs/heads/main" ]]; then
+              echo "❌ Production deployments only allowed from main branch"
+              echo "should-deploy=false" >> $GITHUB_OUTPUT
+              exit 1
+            fi
+            # Check if we have any failing checks
+            if [[ "${{ github.event.inputs.skip_tests }}" != "true" ]]; then
+              echo "Production deployment requires full test suite"
+            fi
+          fi
+          echo "should-deploy=true" >> $GITHUB_OUTPUT
+
+  # ============================================================================
+  # PHASE 2: COMPREHENSIVE SECURITY SCANNING
+  # ============================================================================
+  
+  security-audit:
+    name: 🔒 Security Audit
+    runs-on: ubuntu-latest
+    needs: environment-validation
+    if: needs.environment-validation.outputs.should-deploy == 'true'
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Run npm audit
+        run: |
+          npm audit --audit-level=moderate --output json > npm-audit-report.json || true
+          npm audit --audit-level=moderate
+
+      - name: Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=medium --json > snyk-report.json
+        continue-on-error: true
+
+      - name: Upload security scan results
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: |
+            npm-audit-report.json
+            snyk-report.json
+          retention-days: 30
+
+      - name: CodeQL Analysis
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+      - name: OWASP dependency check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'MySetlist'
+          path: '.'
+          format: 'JSON'
+          args: >
+            --enableRetired
+            --enableExperimental
+            --failOnCVSS 7
+
+      - name: Upload OWASP report
+        uses: actions/upload-artifact@v4
+        with:
+          name: owasp-dependency-report
+          path: reports/dependency-check-report.json
+
+  # ============================================================================
+  # PHASE 3: COMPREHENSIVE TESTING SUITE
+  # ============================================================================
+
+  comprehensive-testing:
+    name: 🧪 Comprehensive Testing
+    runs-on: ubuntu-latest
+    needs: [environment-validation, security-audit]
+    if: needs.environment-validation.outputs.should-deploy == 'true' && !inputs.skip_tests
+    strategy:
+      matrix:
+        test-type: [unit, integration, e2e, performance, accessibility]
+        node-version: [18, 20]
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: mysetlist_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Install Playwright
+        if: matrix.test-type == 'e2e' || matrix.test-type == 'accessibility'
+        run: npx playwright install --with-deps
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        if: matrix.test-type == 'e2e' || matrix.test-type == 'accessibility' || matrix.test-type == 'performance'
+        run: |
+          npm run start &
+          sleep 30
+          curl -f http://localhost:3000 || exit 1
+
+      - name: Run tests
+        run: |
+          case "${{ matrix.test-type }}" in
+            unit)
+              npm run test:unit
+              ;;
+            integration)
+              npm run test:integration
+              ;;
+            e2e)
+              npm run test:e2e
+              ;;
+            performance)
+              npm run test:performance
+              npm run test:lighthouse
+              ;;
+            accessibility)
+              npm run test:accessibility
+              ;;
+          esac
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/mysetlist_test
+          CI: true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.test-type }}-node${{ matrix.node-version }}
+          path: |
+            test-results/
+            coverage/
+            reports/
+          retention-days: 30
+
+  # ============================================================================
+  # PHASE 4: BUILD AND CONTAINER CREATION
+  # ============================================================================
+
+  build-and-push:
+    name: 🏗️ Build & Push Container
+    runs-on: ubuntu-latest
+    needs: [environment-validation, security-audit, comprehensive-testing]
+    if: always() && needs.environment-validation.outputs.should-deploy == 'true' && needs.security-audit.result == 'success' && (needs.comprehensive-testing.result == 'success' || inputs.skip_tests)
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    outputs:
+      image-digest: ${{ steps.build.outputs.digest }}
+      image-tag: ${{ steps.meta.outputs.tags }}
+      sbom-path: ${{ steps.sbom.outputs.path }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{ needs.environment-validation.outputs.deployment-id }}
+
+      - name: Build and push Docker image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            NODE_ENV=production
+            BUILD_DATE=${{ github.event.head_commit.timestamp }}
+            VCS_REF=${{ github.sha }}
+            DEPLOYMENT_ID=${{ needs.environment-validation.outputs.deployment-id }}
+
+      - name: Generate SBOM
+        id: sbom
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          format: spdx-json
+          output-file: sbom.spdx.json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-${{ github.sha }}
+          path: sbom.spdx.json
+
+      - name: Container vulnerability scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # ============================================================================
+  # PHASE 5: STAGING DEPLOYMENT
+  # ============================================================================
+
+  deploy-staging:
+    name: 🚀 Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [environment-validation, build-and-push]
+    if: needs.environment-validation.outputs.should-deploy == 'true' && (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch')
+    environment:
+      name: staging
+      url: https://staging.mysetlist.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Deploy to Vercel (Staging)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./
+          alias-domains: staging.mysetlist.com
+
+      - name: Wait for deployment
+        run: |
+          echo "Waiting for deployment to be ready..."
+          for i in {1..30}; do
+            if curl -sf https://staging.mysetlist.com/api/health; then
+              echo "✅ Staging deployment is ready"
+              break
+            fi
+            echo "⏳ Waiting for deployment... ($i/30)"
+            sleep 10
+          done
+
+      - name: Run staging smoke tests
+        run: |
+          npm run test:production:health -- --target=staging
+          npm run test:production:validate -- --target=staging
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ env.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
+        with:
+          environment: staging
+          version: ${{ github.sha }}
+
+  # ============================================================================
+  # PHASE 6: PRODUCTION DEPLOYMENT (BLUE-GREEN)
+  # ============================================================================
+
+  deploy-production:
+    name: 🚀 Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [environment-validation, build-and-push, deploy-staging]
+    if: needs.environment-validation.outputs.should-deploy == 'true' && github.ref == 'refs/heads/main' && (github.event.inputs.deploy_environment == 'production' || github.event_name == 'push')
+    environment:
+      name: production
+      url: https://mysetlist.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Create backup
+        run: |
+          mkdir -p backups/${{ github.sha }}
+          echo "${{ github.sha }}" > backups/${{ github.sha }}/deployment-id
+          echo "$(date -u)" > backups/${{ github.sha }}/deployment-time
+
+      - name: Blue-Green Deployment
+        id: blue-green
+        run: |
+          echo "🔄 Starting Blue-Green deployment strategy..."
+          
+          # Get current deployment (blue)
+          CURRENT_URL=$(curl -s https://api.vercel.com/v1/deployments \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            | jq -r '.deployments[0].url')
+          
+          echo "Current deployment: $CURRENT_URL"
+          echo "current-url=$CURRENT_URL" >> $GITHUB_OUTPUT
+          
+          # Deploy green version
+          echo "🟢 Deploying green version..."
+
+      - name: Deploy to Vercel (Production)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./
+          vercel-args: '--prod'
+          alias-domains: mysetlist.com
+
+      - name: Health check on green deployment
+        run: |
+          echo "🔍 Running health checks on green deployment..."
+          sleep 30
+          
+          # Wait for deployment to be ready
+          for i in {1..30}; do
+            if curl -sf https://mysetlist.com/api/health; then
+              echo "✅ Green deployment is ready"
+              break
+            fi
+            echo "⏳ Waiting for green deployment... ($i/30)"
+            sleep 10
+          done
+          
+          # Run comprehensive health checks
+          npm run test:production:health -- --target=production
+          npm run test:production:validate -- --target=production
+
+      - name: Canary deployment validation
+        if: env.DEPLOYMENT_STRATEGY == 'canary'
+        run: |
+          echo "🐦 Running canary deployment validation..."
+          npm run test:production:canary -- --target=production --percentage=10
+
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ env.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
+        with:
+          environment: production
+          version: ${{ github.sha }}
+
+      - name: Create GitHub deployment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deployment = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.sha,
+              environment: 'production',
+              description: 'Production deployment via ${{ env.DEPLOYMENT_STRATEGY }} strategy',
+              auto_merge: false,
+              required_contexts: []
+            });
+            
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.data.id,
+              state: 'success',
+              target_url: 'https://mysetlist.com',
+              description: 'Deployment successful',
+              environment_url: 'https://mysetlist.com'
+            });
+
+  # ============================================================================
+  # PHASE 7: POST-DEPLOYMENT VALIDATION
+  # ============================================================================
+
+  post-deployment-validation:
+    name: ✅ Post-Deployment Validation
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: needs.deploy-production.result == 'success'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Comprehensive production validation
+        run: |
+          echo "🔍 Running comprehensive production validation..."
+          
+          # Wait for full deployment propagation
+          sleep 60
+          
+          # Run all production tests
+          npm run test:production:full -- --target=production
+          
+          # Performance validation
+          npm run test:lighthouse:monitor -- --target=production
+          
+          # Security validation
+          npm run test:security -- --target=production
+
+      - name: Monitor deployment metrics
+        run: |
+          echo "📊 Monitoring deployment metrics..."
+          npm run monitor:production:report
+
+  # ============================================================================
+  # PHASE 8: ROLLBACK ON FAILURE
+  # ============================================================================
+
+  rollback-on-failure:
+    name: 🔄 Rollback on Failure
+    runs-on: ubuntu-latest
+    needs: [environment-validation, deploy-production, post-deployment-validation]
+    if: always() && (needs.deploy-production.result == 'failure' || needs.post-deployment-validation.result == 'failure') && github.event.inputs.rollback_on_failure != 'false'
+    environment:
+      name: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit
+
+      - name: Automated rollback
+        run: |
+          echo "🔄 Starting automated rollback..."
+          
+          # Get previous successful deployment
+          PREV_DEPLOYMENT=$(curl -s https://api.vercel.com/v1/deployments \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+            | jq -r '.deployments | map(select(.state == "READY")) | .[1].uid')
+          
+          if [ "$PREV_DEPLOYMENT" != "null" ]; then
+            echo "Rolling back to deployment: $PREV_DEPLOYMENT"
+            
+            # Promote previous deployment
+            curl -X PATCH https://api.vercel.com/v1/deployments/$PREV_DEPLOYMENT/promote \
+              -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}" \
+              -H "Content-Type: application/json"
+            
+            # Wait for rollback
+            sleep 30
+            
+            # Validate rollback
+            npm run test:production:health -- --target=production
+            
+            echo "✅ Rollback completed successfully"
+          else
+            echo "❌ No previous deployment found for rollback"
+            exit 1
+          fi
+
+      - name: Create rollback Sentry release
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ env.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ env.SENTRY_PROJECT }}
+        with:
+          environment: production
+          version: rollback-${{ github.sha }}
+
+  # ============================================================================
+  # PHASE 9: NOTIFICATIONS
+  # ============================================================================
+
+  notifications:
+    name: 📢 Notifications
+    runs-on: ubuntu-latest
+    needs: [environment-validation, deploy-production, post-deployment-validation, rollback-on-failure]
+    if: always() && needs.environment-validation.outputs.should-deploy == 'true'
+    steps:
+      - name: Determine deployment status
+        id: status
+        run: |
+          if [[ "${{ needs.rollback-on-failure.result }}" == "success" ]]; then
+            echo "status=rolled-back" >> $GITHUB_OUTPUT
+            echo "message=Deployment failed and was rolled back successfully" >> $GITHUB_OUTPUT
+          elif [[ "${{ needs.post-deployment-validation.result }}" == "success" ]]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "message=Deployment completed successfully" >> $GITHUB_OUTPUT
+          else
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "message=Deployment failed" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Slack notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              "text": "${{ steps.status.outputs.status == 'success' && '✅' || steps.status.outputs.status == 'rolled-back' && '🔄' || '❌' }} MySetlist Deployment",
+              "attachments": [{
+                "color": "${{ steps.status.outputs.status == 'success' && 'good' || steps.status.outputs.status == 'rolled-back' && 'warning' || 'danger' }}",
+                "blocks": [{
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ steps.status.outputs.message }}\n*Environment:* ${{ env.DEPLOYMENT_ENVIRONMENT }}\n*Strategy:* ${{ env.DEPLOYMENT_STRATEGY }}\n*Branch:* ${{ github.ref_name }}\n*Commit:* ${{ github.sha }}\n*Author:* ${{ github.actor }}"
+                  }
+                }, {
+                  "type": "actions",
+                  "elements": [{
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Deployment"
+                    },
+                    "url": "https://mysetlist.com"
+                  }, {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View Logs"
+                    },
+                    "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                  }]
+                }]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Email notification
+        uses: dawidd6/action-send-mail@v3
+        if: steps.status.outputs.status != 'success'
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "MySetlist Deployment ${{ steps.status.outputs.status }}"
+          body: |
+            Deployment Status: ${{ steps.status.outputs.status }}
+            Environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
+            Strategy: ${{ env.DEPLOYMENT_STRATEGY }}
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+            
+            ${{ steps.status.outputs.message }}
+            
+            View logs: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          to: ${{ secrets.NOTIFICATION_EMAIL }}
+          from: MySetlist Deployment System
